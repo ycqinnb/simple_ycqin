@@ -1,0 +1,11 @@
+{
+  "111": {
+    "category": "record",
+    "sounds": [
+      {
+        "name": "ycqin:111",
+        "stream": true
+      }
+    ]
+  }
+}
