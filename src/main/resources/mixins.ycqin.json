@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "compatibilityLevel": "JAVA_8",
+  "package": "yc.ycqin.nb.mixins",
+  "minVersion": "0.8",
+  "setSourceFile": true,
+  "priority": 0,
+  "plugin": "YourLateMixinLoader",
+  "refmap": "mixins.ycqin.refmap.json",
+  "mixins": [
+
+  ],
+  "client": [
+  ],
+  "server": [
+  ]
+}

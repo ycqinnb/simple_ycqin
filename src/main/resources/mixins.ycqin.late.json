@@ -1,0 +1,11 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "yc.ycqin.nb.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "mixins.ycqin.refmap.json",
+  "target": "@env(DEFAULT)",
+  "mixins": [
+    "MixinTileGrinder"
+  ]
+}

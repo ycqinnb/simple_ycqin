@@ -20,7 +20,7 @@ public class BlocksRegister {
     }
 
     private static Block[] blocks = {
-            LONG_BLOCK
+            //LONG_BLOCK
     };
 
     @SubscribeEvent

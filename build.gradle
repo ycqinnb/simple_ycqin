@@ -1,16 +1,31 @@
 buildscript {
     repositories {
         maven { url = 'https://maven.minecraftforge.net/' }
+        maven { url = "https://repo.spongepowered.org/maven" }
         mavenCentral()
     }
     dependencies {
         classpath 'net.minecraftforge.gradle:ForgeGradle:3.+'
+        classpath 'org.spongepowered:mixingradle:0.7-SNAPSHOT'
+    }
+}
+
+repositories {
+    maven { name = 'ParchmentMC'; url = 'https://maven.parchmentmc.org' }
+    maven {
+        name = "Modrinth"
+        url = "https://api.modrinth.com/maven"
+    }
+    maven { url = "https://repo.spongepowered.org/maven" }
+    maven {
+        url "https://cursemaven.com"
     }
 }
         
 apply plugin: 'net.minecraftforge.gradle'
 // Only edit below this line, the above code adds and enables the necessary things for Forge to be setup.
 apply plugin: 'eclipse'
+apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'maven-publish'
 
 version = '1.0'
@@ -18,7 +33,10 @@ group = 'yc.ycqin.nb' // http://maven.apache.org/guides/mini/guide-naming-conven
 archivesBaseName = 'ycqin'
 
 sourceCompatibility = targetCompatibility = compileJava.sourceCompatibility = compileJava.targetCompatibility = '1.8' // Need this here so eclipse task generates correctly.
-
+mixin {
+    //把parasitic_technology_mixin_affiliation换成你自己modid就行
+    add sourceSets.main, "mixins.ycqin.refmap.json"
+}
 minecraft {
     // The mappings can be changed at any time, and must be in the following format.
     // snapshot_YYYYMMDD   Snapshot are built nightly.
@@ -60,7 +78,9 @@ dependencies {
     // that the dep is a ForgeGradle 'patcher' dependency. And it's patches will be applied.
     // The userdev artifact is a special name and will get all sorts of transformations applied to it.
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
-
+    compileOnly "curse.maven:draconic-evolution-223565:3431261"
+    compileOnly 'curse.maven:mixin-booter-419286:7049694'
+    compile files('libs/SRParasites-1.10.2.jar')
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"
@@ -91,7 +111,8 @@ jar {
             "Implementation-Title": project.name,
             "Implementation-Version": "${version}",
             "Implementation-Vendor" :"examplemodsareus",
-            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")
+            "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ"),
+            //"TweakClass": "yc.ycqin.nb.YcqinTweaker"
         ])
     }
 }

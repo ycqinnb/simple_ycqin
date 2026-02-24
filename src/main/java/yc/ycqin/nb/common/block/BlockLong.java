@@ -6,6 +6,8 @@ import net.minecraft.block.material.Material;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
+import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.World;
 import yc.ycqin.nb.register.ItemsRegister;
 import yc.ycqin.nb.ycqin;
 
@@ -25,5 +27,10 @@ public class BlockLong extends Block {
     @Override
     public Item getItemDropped(IBlockState state, Random rand, int fortune) {
         return Item.getItemFromBlock(this);
+    }
+
+    @Override
+    public void onBlockDestroyedByPlayer(World world, BlockPos blockPos , IBlockState iBlockState) {
+
     }
 }

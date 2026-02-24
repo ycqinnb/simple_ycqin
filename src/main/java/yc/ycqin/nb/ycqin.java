@@ -7,9 +7,11 @@ import net.minecraftforge.fml.common.SidedProxy;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import org.apache.logging.log4j.Logger;
+import org.spongepowered.asm.launch.MixinBootstrap;
+import org.spongepowered.asm.mixin.Mixins;
 import yc.ycqin.nb.proxy.CommonProxy;
 
-@Mod(modid = ycqin.MODID, name = ycqin.NAME, version = ycqin.VERSION)
+@Mod(modid = ycqin.MODID, name = ycqin.NAME, version = ycqin.VERSION, dependencies = "required-after:draconicevolution")
 public class ycqin
 {
     public static final String MODID = "ycqin";

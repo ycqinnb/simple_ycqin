@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "CDC",
+    "ABA"
+  ],
+  "key": {
+    "A": { "item": "srparasites:beckon_drop" },
+    "B": { "item": "srparasites:ada_yelloweye_drop" },
+    "C": { "item": "srparasites:ada_yelloweye_drop" },
+    "D": { "item": "srparasites:dispatchern" }
+  },
+  "result": {
+    "item": "ycqin:ycqin",
+    "count": 1
+  }
+}
