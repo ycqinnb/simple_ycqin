@@ -14,7 +14,7 @@ public class ModelsRegister {
     @SubscribeEvent
     public void registerModels(ModelRegistryEvent event) {
         registerModel(ItemsRegister.YCQIN);
-
+        registerModel(ItemsRegister.Drafh);
     }
 
     private void registerModel(Item item) {

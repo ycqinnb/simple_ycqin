@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABA",
+    "CDC",
+    "ABA"
+  ],
+  "key": {
+    "A": { "item": "minecraft:end_crystal" },
+    "B": { "item": "draconicevolution:draconium_ingot" },
+    "C": { "item": "draconicevolution:draconium_ingot" },
+    "D": { "item": "draconicevolution:wyvern_core" }
+  },
+  "result": {
+    "item": "ycqin:fuhuomodilong",
+    "count": 1
+  }
+}

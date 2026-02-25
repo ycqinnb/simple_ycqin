@@ -26,7 +26,7 @@ public class ycqin
             )
     private static CommonProxy proxy;
 
-    private static Logger logger;
+    public static Logger logger;
 
     @EventHandler
     public void preInit(FMLPreInitializationEvent event)

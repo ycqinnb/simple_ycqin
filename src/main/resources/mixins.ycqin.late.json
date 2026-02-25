@@ -6,6 +6,7 @@
   "refmap": "mixins.ycqin.refmap.json",
   "target": "@env(DEFAULT)",
   "mixins": [
-    "MixinTileGrinder"
+    "MixinTileGrinder",
+    "MixinDragonFightManager"
   ]
 }
