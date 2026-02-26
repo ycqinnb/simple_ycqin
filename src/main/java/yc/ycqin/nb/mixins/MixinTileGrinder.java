@@ -5,6 +5,7 @@ import net.minecraft.util.DamageSource;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Redirect;
+import yc.ycqin.nb.config.ModConfig;
 
 @Mixin(value = TileGrinder.class, remap = false) // 直接使用类引用，清晰明了
 public class MixinTileGrinder {
@@ -18,8 +19,10 @@ public class MixinTileGrinder {
             remap = false // 原版方法需要重映射
     )
     private boolean redirectGrinderAttack(EntityLivingBase target, DamageSource source, float damage) {
-
-        target.setDead();
-        return true; // 返回 true 表示攻击已处理
+      if (ModConfig.fixEnabled) {
+          target.setDead();
+          return true;
+      }
+        return target.attackEntityFrom(source, damage);
     }
 }

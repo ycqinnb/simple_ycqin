@@ -1,6 +1,7 @@
 package yc.ycqin.nb.srpcore;
 
 
+import com.dhanantry.scapeandrunparasites.network.SRPCommandEvolution;
 import com.dhanantry.scapeandrunparasites.world.SRPSaveData;
 import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.world.World;
@@ -63,12 +64,7 @@ public class ParasiteEvolutionSync {
                 ": dim=" + dim + " phase=" + phase + " total=" + total + " next=" + next);
     }
 
-    private int getNextPhasePoints(int currentPhase) {
-        // 如果当前阶段已经是最后一阶段（例如阶段10），返回当前阶段最大值（进度条满）
-        if (currentPhase >= EvolutionBarConfig.PHASE_MAX_VALUES.length - 1) {
-            return EvolutionBarConfig.PHASE_MAX_VALUES[EvolutionBarConfig.PHASE_MAX_VALUES.length - 1];
-        }
-        // 否则返回下一阶段的最大值
-        return EvolutionBarConfig.PHASE_MAX_VALUES[currentPhase + 1];
-    }
+     private int getNextPhasePoints(int currentPhase) {
+         return SRPCommandEvolution.getNeededPoints((byte)(currentPhase+1));
+     }
 }

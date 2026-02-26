@@ -2,6 +2,7 @@ package yc.ycqin.nb.common.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.entity.player.EntityPlayerMP;
@@ -26,6 +27,7 @@ import yc.ycqin.nb.register.ItemsRegister;
 import yc.ycqin.nb.register.SoundRegister;
 import yc.ycqin.nb.ycqin;
 
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -43,6 +45,12 @@ public class ItemYcqin extends Item {
         this.setCreativeTab(ItemsRegister.YCQIN_TABLE);
         this.setMaxStackSize(1);
 
+    }
+    @Override
+    public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
+        // 添加介绍文字（可以有多行）
+        tooltip.add("§e右键传送至寄生虫维度，再次右键返回");
+        // 你可以使用颜色代码 § 来设置颜色，例如 §7 为灰色，§e 为黄色
     }
 
     @Override

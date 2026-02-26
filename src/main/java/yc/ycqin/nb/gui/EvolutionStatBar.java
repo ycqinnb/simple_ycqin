@@ -4,6 +4,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.util.ResourceLocation;
+import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.srpcore.EvolutionBarConfig;
 import yc.ycqin.nb.srpcore.EvolutionPhase;
 
@@ -24,7 +25,7 @@ public class EvolutionStatBar extends Gui {
         this.currentPhase = EvolutionPhase.PHASE_0;
         this.currentValue = 0;
         this.maxValue = EvolutionBarConfig.PHASE_MAX_VALUES[0];
-        this.shouldDisplay = EvolutionBarConfig.SHOW_EVOLUTION_BAR;
+        this.shouldDisplay = ModConfig.evolutionBarEnabled;
     }
 
     public void updateData(int phaseNum, int currentValue) {
@@ -63,6 +64,7 @@ public class EvolutionStatBar extends Gui {
         if (useParasiteData) {
             if (parasiteNextPoints <= 0) return 0;
             double ratio = (double) parasitePoints / parasiteNextPoints;
+            if (ratio > 1) ratio = 1;
             return (int) (ratio * EvolutionBarConfig.BAR_WIDTH);
         } else {
             if (maxValue <= 0) return 0;
@@ -86,9 +88,11 @@ public class EvolutionStatBar extends Gui {
         ScaledResolution scaled = new ScaledResolution(mc);
         int screenHeight = scaled.getScaledHeight();
 
-        // 左下角固定位置
-        int x = 10;
-        int y = screenHeight - EvolutionBarConfig.BAR_HEIGHT - 20;
+        int x = ModConfig.evolutionBarPosX;
+        int y = ModConfig.evolutionBarPosY;
+        if (y == -1) {
+            y = screenHeight - ModConfig.evolutionBarHeight - 20; // 底部留20像素边距
+        }
 
         // 确定纹理阶段
         int phaseForTexture = useParasiteData ? displayPhase : currentPhase.getPhaseNum();
@@ -98,20 +102,23 @@ public class EvolutionStatBar extends Gui {
         mc.getTextureManager().bindTexture(texture);
 
         // 绘制背景条
-        drawTexturedModalRect(x, y, 0, 0, EvolutionBarConfig.BAR_WIDTH, EvolutionBarConfig.BAR_HEIGHT);
+        drawTexturedModalRect(x, y, 0, 0, ModConfig.evolutionBarWidth, ModConfig.evolutionBarHeight);
 
         // 绘制移动条
         int movingWidth = getMovingBarWidth();
         if (movingWidth > 0) {
-            int movingU = 23;   // 根据你的纹理调整
-            int movingV = 32;   // 根据你的纹理调整
-            drawTexturedModalRect(x + 23, y + 3, movingU, movingV, movingWidth, EvolutionBarConfig.BAR_HEIGHT);
+            drawTexturedModalRect(x + ModConfig.evolutionBarMovingOffsetX,
+                    y + ModConfig.evolutionBarMovingOffsetY,
+                    ModConfig.evolutionBarMovingU,
+                    ModConfig.evolutionBarMovingV,
+                    movingWidth,
+                    ModConfig.evolutionBarHeight);
         }
 
         // 绘制右侧点数
         String pointsText = getPointsText();
-        int textX = x + EvolutionBarConfig.BAR_WIDTH + 5;
-        int textY = y + (EvolutionBarConfig.BAR_HEIGHT / 2) - 4;
+        int textX = x + ModConfig.evolutionBarWidth + 5;
+        int textY = y + (ModConfig.evolutionBarHeight / 2) - 4;
         mc.fontRenderer.drawStringWithShadow(pointsText, textX, textY, 0xFFFFFF);
     }
 

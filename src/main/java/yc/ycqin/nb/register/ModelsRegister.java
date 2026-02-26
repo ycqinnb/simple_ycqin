@@ -15,6 +15,7 @@ public class ModelsRegister {
     public void registerModels(ModelRegistryEvent event) {
         registerModel(ItemsRegister.YCQIN);
         registerModel(ItemsRegister.Drafh);
+        registerModel(ItemsRegister.UPGRADE);
     }
 
     private void registerModel(Item item) {
