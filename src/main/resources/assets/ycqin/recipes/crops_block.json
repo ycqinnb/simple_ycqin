@@ -1,0 +1,63 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "ABC",
+    "DEF",
+    "GHI"
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:potato"
+    },
+    "B": {
+      "item": "minecraft:carrot"
+    },
+    "C": {
+      "item": "minecraft:beetroot"
+    },
+    "D": {
+      "item": "minecraft:melon"
+    },
+    "E": {
+      "item": "minecraft:nether_wart"
+    },
+    "F": {
+      "item": "minecraft:reeds"
+    },
+    "G": {
+      "item": "minecraft:wheat"
+    },
+    "H": [
+      {
+        "item": "minecraft:planks",
+        "data": 0
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 1
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 2
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 3
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 4
+      },
+      {
+        "item": "minecraft:planks",
+        "data": 5
+      }
+    ],
+    "I": {
+      "item": "minecraft:wheat_seeds"
+    }
+  },
+  "result": {
+    "item": "ycqin:crops"
+  }
+}

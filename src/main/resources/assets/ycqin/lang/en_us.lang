@@ -1,5 +1,11 @@
 item.ycqin.ycqin.name=ycqin
 item.ycqin.fuhuomodilong.name=fh dr
 itemGroup.ycqin=ycqin
-tile.ycqin.longblock.name=LONG BLOCK
+tile.ycqin.final_specimen.name=final_specimen
 item.ycqin.upgrade.name=upgrade_core
+tile.ycqin.specimen_farm.name=specimen_farm
+tile.ycqin.specimen_cell.name=specimen_cell
+tile.ycqin.specimen_infect.name=specimen_infect
+tile.ycqin.crops.name=crops
+enchantment.min_damage_protect=min damage protect
+enchantment.yc_min_damage=min damage

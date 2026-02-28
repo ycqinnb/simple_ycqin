@@ -154,13 +154,10 @@ public class YcDimChunkGenerator implements IChunkGenerator {
     }
 
     private void ensureNodePlaced() {
-        BlockPos nodePos = new BlockPos(0, 10, 0);
+        //BlockPos nodePos = new BlockPos(0, 10, 0);
 
         // 1. 设置演化阶段为10
         ensurePhase10(world);
-
-        // 2. 设置UD等级为4（静态字段）
-        SRPSaveData.falseLevel = 4;
 
         nodePlaced = true;
 

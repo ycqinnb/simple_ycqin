@@ -1,0 +1,10 @@
+{
+  "forge_marker": 1,
+  "defaults": {
+    "model": "ycqin:crops"
+  },
+  "variants": {
+    "normal": { "model": "ycqin:crops" },
+    "inventory": [{}]
+  }
+}

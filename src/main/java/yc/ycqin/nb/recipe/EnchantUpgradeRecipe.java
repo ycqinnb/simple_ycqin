@@ -7,6 +7,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.world.World;
 import net.minecraftforge.registries.IForgeRegistryEntry;
+import yc.ycqin.nb.config.ModConfig;
 
 public class EnchantUpgradeRecipe extends IForgeRegistryEntry.Impl<IRecipe> implements IRecipe {
 
@@ -63,7 +64,9 @@ public class EnchantUpgradeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impl
         for (int i = 0; i < enchantments.tagCount(); i++) {
             NBTTagCompound ench = enchantments.getCompoundTagAt(i).copy(); // 复制原附魔
             short lvl = ench.getShort("lvl");
-            lvl++; // 等级+1（直接加，无视上限）
+            if (lvl < ModConfig.ecMixLevel) {
+                lvl++; // 等级+1（直接加，无视上限）
+            }
             ench.setShort("lvl", lvl);
             newEnchantments.appendTag(ench);
         }

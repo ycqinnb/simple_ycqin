@@ -1,5 +1,11 @@
 item.ycqin.ycqin.name=歪C
 item.ycqin.fuhuomodilong.name=末影龙复活！！！（请在末地使用）
 itemGroup.ycqin=ycqin
-tile.ycqin.longblock.name=龙方块
+tile.ycqin.final_specimen.name=世界净化核心
 item.ycqin.upgrade.name=超限附魔
+tile.ycqin.specimen_farm.name=样本方块（农业）
+tile.ycqin.specimen_cell.name=样本方块（细胞）
+tile.ycqin.specimen_infect.name=样本方块（感染）
+tile.ycqin.crops.name=作物桶
+enchantment.min_damage_protect=最小伤害保护
+enchantment.yc_min_damage=最小伤害

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.gameevent.TickEvent;
 import org.apache.logging.log4j.Logger;
 import org.spongepowered.asm.launch.MixinBootstrap;
 import org.spongepowered.asm.mixin.Mixins;
+import yc.ycqin.nb.network.YcCommand;
 import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.srpcore.EvolutionDataManager;
 
@@ -22,7 +23,7 @@ public class ycqin
 {
     public static final String MODID = "ycqin";
     public static final String NAME = "ycqin";
-    public static final String VERSION = "1.2";
+    public static final String VERSION = "1.4";
 
     @Mod.Instance(ycqin.MODID)
     private static ycqin instance;
@@ -50,7 +51,8 @@ public class ycqin
         logger.info("DIRT BLOCK >> {}", Blocks.DIRT.getRegistryName());
         proxy.init(event);
     }
-
-
-
+    @EventHandler
+    public static void onServerStarting(FMLServerStartingEvent event) {
+        event.registerServerCommand(new YcCommand());
+    }
 }

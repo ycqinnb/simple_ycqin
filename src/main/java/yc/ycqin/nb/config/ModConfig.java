@@ -28,7 +28,6 @@ public class ModConfig {
     public static String[] dimBoostAttributes = {               // 要增强的属性列表（使用属性注册名）
             "generic.maxHealth",
             "generic.attackDamage",
-            "generic.movementSpeed",
             "generic.followRange",
             "generic.knockbackResistance",
             "generic.armor",
@@ -37,9 +36,21 @@ public class ModConfig {
 
     // ========== 附魔+1物品掉落配置 ==========
     public static boolean dropEnabled = true;                    // 是否启用附魔+1物品的掉落
-    public static double dropChance = 0.1;                          // 生物死亡时掉落附魔+1物品的概率（0.0~1.0）
+    public static double dropChance = 0.1;                      // 生物死亡时掉落附魔+1物品的概率（0.0~1.0）
+    public static int ecMixLevel = 8;
     // ========== 龙之研究配置 ==========
     public static boolean fixEnabled = true;                    //是否修复龙之研究磨床？
+
+    public static int baseScore;
+    public static int deathPenalty;
+    public static int unattendedPenalty;
+    public static int difficultyFactor;
+    public static int phase1Duration;
+    public static int phase2Duration;
+    public static int phase3Duration;
+    public static int phase4Duration;
+    public static int phase5Duration;
+    public static int[] baseSpawnByPlayerCount; // 需要解析字符串
 
     /**
      * 初始化配置文件（在preInit中调用）
@@ -146,7 +157,6 @@ public class ModConfig {
         String[] defaultAttrs = {
                 "generic.maxHealth",
                 "generic.attackDamage",
-                "generic.movementSpeed",
                 "generic.followRange",
                 "generic.knockbackResistance",
                 "generic.armor",
@@ -174,13 +184,82 @@ public class ModConfig {
                 1.0f,
                 "生物死亡时掉落超限附魔物品的概率（0.0~1.0）"
         );
+        ecMixLevel = config.getInt(
+                "ecMixLevel",
+                "item_drop",
+                8,
+                0,
+                32767,
+                "超限附魔能达到的最大等级"
+        );
         fixEnabled = config.getBoolean(
                 "fixEnabled",
                 "Dra",
                 true,
                 "是否修复龙之研究磨床"
         );
+        // 净化之战配置
+        baseScore = config.getInt(
+                "baseScore",
+                "purification",
+                100,
+                0,
+                1000,
+                "基础点数，用于结局评估"
+        );
 
+        deathPenalty = config.getInt(
+                "deathPenalty",
+                "purification",
+                3,
+                0,
+                100,
+                "每死亡一次扣除的点数"
+        );
+
+        unattendedPenalty = config.getInt(
+                "unattendedPenalty",
+                "purification",
+                2,
+                0,
+                100,
+                "每分钟无人守点扣除的点数"
+        );
+
+        difficultyFactor = config.getInt(
+                "difficultyFactor",
+                "purification",
+                2,
+                0,
+                100,
+                "难度系数：最终难度乘以该值得到每分钟额外刷怪量"
+        );
+
+// 阶段持续时间（秒）
+        phase1Duration = config.getInt("phase1Duration", "purification", 360, 10, 3600, "第一阶段持续时间（秒）");
+        phase2Duration = config.getInt("phase2Duration", "purification", 360, 10, 3600, "第二阶段持续时间（秒）");
+        phase3Duration = config.getInt("phase3Duration", "purification", 288, 10, 3600, "第三阶段持续时间（秒）");
+        phase4Duration = config.getInt("phase4Duration", "purification", 96, 10, 3600, "第四阶段持续时间（秒）");
+        phase5Duration = config.getInt("phase5Duration", "purification", 120, 10, 3600, "第五阶段（隐藏）持续时间（秒）");
+
+        String[] defaultSpawn = new String[]{"5", "8", "12", "16"};
+        String[] spawnStrs = config.getStringList(
+                "baseSpawnByPlayerCount",
+                "purification",
+                defaultSpawn,
+                "根据玩家人数决定的基础刷怪量，顺序为：0人,1人,2人,3人及以上。每个值应为整数。"
+        );
+
+        // 解析 String[] 为 int[]
+        baseSpawnByPlayerCount = new int[spawnStrs.length];
+        for (int i = 0; i < spawnStrs.length; i++) {
+            try {
+                baseSpawnByPlayerCount[i] = Integer.parseInt(spawnStrs[i].trim());
+            } catch (NumberFormatException e) {
+                baseSpawnByPlayerCount[i] = 5; // 解析失败时使用默认值
+                System.out.println("[ModConfig] 解析 baseSpawnByPlayerCount 出错，使用默认值 5");
+            }
+        }
         // 保存变更
         if (config.hasChanged()) {
             config.save();

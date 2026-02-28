@@ -1,5 +1,6 @@
 package yc.ycqin.nb.event;
 
+import com.dhanantry.scapeandrunparasites.world.SRPSaveData;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.item.Item;
@@ -20,7 +21,7 @@ public class DimensionDropHandler {
     @SubscribeEvent
     public void onLivingDeath(LivingDeathEvent event) {
         // 只在服务端执行
-        if (!ModConfig.dropEnabled) return;
+
 
         if (event.getEntity().world.isRemote) return;
 
@@ -40,10 +41,12 @@ public class DimensionDropHandler {
         // 获取要掉落的物品（假设物品已注册）
         Item dropItem = ItemsRegister.UPGRADE; // 替换为你的物品实例
         if (dropItem == null) return;
-
+        SRPSaveData.get(world,63).setEvolutionPhase(world.provider.getDimension(), (byte)10, true, world);
+        if (!ModConfig.dropEnabled) return;
         // 生成物品实体
         ItemStack dropStack = new ItemStack(dropItem, 1);
         EntityItem entityItem = new EntityItem(world, entity.posX, entity.posY, entity.posZ, dropStack);
         world.spawnEntity(entityItem);
+
     }
 }
