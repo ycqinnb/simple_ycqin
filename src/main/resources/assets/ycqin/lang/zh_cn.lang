@@ -1,5 +1,4 @@
 item.ycqin.ycqin.name=歪C
-item.ycqin.fuhuomodilong.name=末影龙复活！！！（请在末地使用）
 itemGroup.ycqin=ycqin
 tile.ycqin.final_specimen.name=世界净化核心
 item.ycqin.upgrade.name=超限附魔
@@ -9,3 +8,8 @@ tile.ycqin.specimen_infect.name=样本方块（感染）
 tile.ycqin.crops.name=作物桶
 enchantment.min_damage_protect=最小伤害保护
 enchantment.yc_min_damage=最小伤害
+item.flammpfeil.slashblade.named.bloodstained_sky.name=§4寄染【血洗天穹】
+slashblade.seffect.name.MinDamageSe=最小伤害
+flammpfeil.slashblade.specialattack.orb_boom=寄染泡
+enchantment.ycqin.ycqin.yc_min_damage.desc=每级对敌人造成额外的1点最小伤害
+enchantment.ycqin.min_damage_protect.desc=每级减少一点受到的最小伤害

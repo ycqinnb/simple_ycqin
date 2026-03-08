@@ -18,15 +18,15 @@ import yc.ycqin.nb.network.YcCommand;
 import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.srpcore.EvolutionDataManager;
 
-@Mod(modid = ycqin.MODID, name = ycqin.NAME, version = ycqin.VERSION, dependencies = "required-after:draconicevolution")
+@Mod(modid = ycqin.MODID, name = ycqin.NAME, version = ycqin.VERSION)
 public class ycqin
 {
     public static final String MODID = "ycqin";
     public static final String NAME = "ycqin";
-    public static final String VERSION = "1.4";
+    public static final String VERSION = "1.5";
 
     @Mod.Instance(ycqin.MODID)
-    private static ycqin instance;
+    public static ycqin instance;
     @SidedProxy
             (clientSide = "yc.ycqin.nb.proxy.ClientProxy",
                     serverSide = "yc.ycqin.nb.proxy.CommonProxy"

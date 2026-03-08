@@ -39,7 +39,7 @@ public class ModConfig {
     public static double dropChance = 0.1;                      // 生物死亡时掉落附魔+1物品的概率（0.0~1.0）
     public static int ecMixLevel = 8;
     // ========== 龙之研究配置 ==========
-    public static boolean fixEnabled = true;                    //是否修复龙之研究磨床？
+
 
     public static int baseScore;
     public static int deathPenalty;
@@ -191,12 +191,6 @@ public class ModConfig {
                 0,
                 32767,
                 "超限附魔能达到的最大等级"
-        );
-        fixEnabled = config.getBoolean(
-                "fixEnabled",
-                "Dra",
-                true,
-                "是否修复龙之研究磨床"
         );
         // 净化之战配置
         baseScore = config.getInt(

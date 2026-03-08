@@ -21,7 +21,7 @@ public class ParasiteEvolutionSync {
             tickCounter++;
             if (tickCounter >= 100) {
                 tickCounter = 0;
-                System.out.println("[YcDim] Server tick: sending to all players");
+
                 syncAllPlayers();
             }
         }
@@ -30,7 +30,7 @@ public class ParasiteEvolutionSync {
     @SubscribeEvent
     public void onPlayerChangedDimension(PlayerEvent.PlayerChangedDimensionEvent event) {
         if (!event.player.world.isRemote) {
-            System.out.println("[YcDim] Player changed dimension, sending evolution data.");
+
             sendDataToPlayer((EntityPlayerMP) event.player);
         }
     }
@@ -38,7 +38,7 @@ public class ParasiteEvolutionSync {
     @SubscribeEvent
     public void onPlayerLogin(PlayerEvent.PlayerLoggedInEvent event) {
         if (!event.player.world.isRemote) {
-            System.out.println("[YcDim] Player logged in, sending evolution data.");
+
             sendDataToPlayer((EntityPlayerMP) event.player);
         }
     }
@@ -60,8 +60,6 @@ public class ParasiteEvolutionSync {
 
         // 强制发送，不检查缓存
         EvolutionDataManager.NETWORK.sendTo(new ParasiteEvolutionPacket(dim, phase, total, next), player);
-        System.out.println("[YcDim] Sent evolution data to player " + player.getName() +
-                ": dim=" + dim + " phase=" + phase + " total=" + total + " next=" + next);
     }
 
      private int getNextPhasePoints(int currentPhase) {
