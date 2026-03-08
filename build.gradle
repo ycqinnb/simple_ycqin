@@ -80,7 +80,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     compileOnly "curse.maven:draconic-evolution-223565:3431261"
     compileOnly 'curse.maven:mixin-booter-419286:7049694'
-    compile files('libs/SRParasites-1.10.2.jar')
+    compile files('libs/SRParasites-1.10.3.jar')
     compile files('libs/guns-0.15.3-1.12.2.jar')
     compile files('libs/拔刀剑.jar')
     compile files('libs/电力更多.jar')

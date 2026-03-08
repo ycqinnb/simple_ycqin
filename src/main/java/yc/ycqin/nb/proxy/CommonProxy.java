@@ -76,6 +76,12 @@ public class CommonProxy {
         return new ItemStack(item, count);
     }
 
+    private ItemStack getStackFromName(String modId, String path, int count, int meta) {
+        Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
+        if (item == null) return ItemStack.EMPTY;
+        return new ItemStack(item, count, meta);
+    }
+
     private void regWorldWar(){
         ItemStack output1 = new ItemStack(BlocksRegister.BLOCKFINALSPECIMEN);
         ItemStack output2 = new ItemStack(BlocksRegister.BLOCKSPFARM);
@@ -103,7 +109,7 @@ public class CommonProxy {
                 getStackFromName("srparasites", "infestedrubble", 320),
                 getStackFromName("srparasites", "infestedstain", 320),
                 getStackFromName("srparasites", "parasitethin", 32),
-                getStackFromName("srparasites", "infestedbush", 128),
+                getStackFromName("srparasites", "infestedbush", 128,3),
                 getStackFromName("srparasites", "parasitemouth", 32),
                 getStackFromName("srparasites", "parasiterubble", 64),
                 getStackFromName("srparasites", "biomeheart", 1)
