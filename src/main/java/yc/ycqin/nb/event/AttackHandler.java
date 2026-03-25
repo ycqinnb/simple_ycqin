@@ -7,11 +7,15 @@ import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.event.entity.living.LivingHurtEvent;
 import net.minecraftforge.event.entity.player.AttackEntityEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import yc.ycqin.nb.register.ModEnchantments;
 
 import javax.annotation.Nullable;
@@ -29,18 +33,31 @@ public class AttackHandler {
         ItemStack weapon = player.getHeldItemMainhand();
         int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE, weapon);
         if (level <= 0) return; // 没有附魔，交给原版处理
-        attackWithMinimumDamage(livingTarget,level,player,event);
+        attackWithMinimumDamage(livingTarget,level,player);
     }
 
-    public static boolean attackWithMinimumDamage(EntityLivingBase target, float minDamage, @Nullable EntityLivingBase attacker,AttackEntityEvent event) {
+    public static boolean attackWithMinimumDamage(EntityLivingBase target, float minDamage, @Nullable EntityLivingBase attacker) {
         // 只在服务端执行
         if (target.world.isRemote) return false;
 
         // 基础有效性检查
         if (!target.isEntityAlive()) return false;
 
-        // 应用最小伤害保护附魔（胸甲）
+
         float finalDamage = minDamage;
+
+        // 检查病毒效果，增加伤害倍数
+        Potion viralPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("srparasites", "viral"));
+        if (viralPotion != null) {
+            PotionEffect effect = target.getActivePotionEffect(viralPotion);
+            if (effect != null) {
+                int amplifier = effect.getAmplifier(); // 0-based
+                int virusLevel = amplifier + 1;
+                float multiplier = 1 + virusLevel; // 例如病毒等级4 => 倍数5
+                finalDamage = finalDamage * multiplier;
+            }
+        }
+
         if (target instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) target;
             ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
@@ -49,6 +66,8 @@ public class AttackHandler {
                 finalDamage = Math.max(0, finalDamage - level); // 每级减少1点
             }
         }
+
+
 
         // 伤害必须大于0才有效
         if (finalDamage <= 0) return false;
@@ -71,7 +90,7 @@ public class AttackHandler {
                 source = DamageSource.OUT_OF_WORLD;
             }
             target.onDeath(source);
-            event.setCanceled(true);
+            //event.setCanceled(true);
             // Minecraft 会随后处理实体移除，无需额外调用 setDead()
         }
 

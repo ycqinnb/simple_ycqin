@@ -2,8 +2,11 @@ package yc.ycqin.nb.register;
 
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.fml.common.registry.EntityRegistry;
+import net.minecraftforge.fml.common.registry.GameRegistry;
 import yc.ycqin.nb.common.entity.EntitySlashOrbBoom;
 import yc.ycqin.nb.common.entity.EntitySlashOrbVoid;
+import yc.ycqin.nb.common.entity.EntitySummonSlash;
+import yc.ycqin.nb.common.entity.tileentity.TileEntityParasiteCore;
 import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.ycqin;
 
@@ -13,7 +16,7 @@ public class EntityRegister {
     public EntityRegister(){
         if (CommonProxy.isSlashBladeLoaded){
             EntityRegistry.registerModEntity(
-                    new ResourceLocation(MODID, "textures/entity/orbscary.png"),   // 注册名（资源位置）
+                    new ResourceLocation(MODID, "orbscary"),   // 注册名（资源位置）
                     EntitySlashOrbBoom.class,                        // 实体类
                     "orb_scary",                                 // 实体名称（用于网络协议）
                     114514,                                       // 网络ID（唯一整数）
@@ -23,7 +26,7 @@ public class EntityRegister {
                     true                                              // 是否发送速度更新
             );
             EntityRegistry.registerModEntity(
-                    new ResourceLocation("ycqin", "textures/entity/orbvoid.png"),
+                    new ResourceLocation("ycqin", "orbvoid"),
                     EntitySlashOrbVoid.class,
                     "orb_void",
                     114515,
@@ -33,5 +36,19 @@ public class EntityRegister {
                     true
             );
         }
+        GameRegistry.registerTileEntity(TileEntityParasiteCore.class, new ResourceLocation(ycqin.MODID, "parasite_core"));
+        if (CommonProxy.isTCLoaded) {
+            EntityRegistry.registerModEntity(
+                    new ResourceLocation("ycqin","slashAttack"),
+                    EntitySummonSlash.class,
+                    "slashAttack",
+                    14221,
+                    ycqin.instance,
+                    64,
+                    1,
+                    true
+            );
+        }
+
     }
 }

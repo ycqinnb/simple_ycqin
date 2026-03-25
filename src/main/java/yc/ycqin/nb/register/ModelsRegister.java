@@ -15,6 +15,7 @@ public class ModelsRegister {
     public void registerModels(ModelRegistryEvent event) {
         registerModel(ItemsRegister.YCQIN);
         registerModel(ItemsRegister.UPGRADE);
+        registerModel(ItemsRegister.ROOTERDROP);
     }
 
     private void registerModel(Item item) {

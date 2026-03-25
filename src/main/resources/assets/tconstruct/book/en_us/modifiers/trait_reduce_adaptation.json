@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_reduce_adaptation",
+  "text": [
+    {
+      "text": "Attacks have a chance to reduce the parasite's adaptation."
+    }
+  ],
+  "effects": [
+    "Multiple enhancements"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

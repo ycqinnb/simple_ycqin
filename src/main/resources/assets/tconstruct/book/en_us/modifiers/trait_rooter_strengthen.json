@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_rooter_strengthen",
+  "text": [
+    {
+      "text": "After a full attack, gain absorption effect."
+    }
+  ],
+  "effects": [
+    "Multiple enhancements"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

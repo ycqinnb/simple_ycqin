@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_min_damage",
+  "text": [
+    {
+      "text": "每次攻击附加一个最低伤害。"
+    }
+  ],
+  "effects": [
+    "多次强化",
+    "真伤！"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

@@ -30,6 +30,7 @@ public class BladeBloodstainedSky {
         ItemSlashBladeNamed.CurrentItemName.set(tag, BLADE_NAME);
         // 可选：设置 CustomMaxDamage
         ItemSlashBladeNamed.CustomMaxDamage.set(tag, 250);
+        ItemSlashBladeNamed.IsDefaultBewitched.set(tag,true);
         // 基础攻击力
         ItemSlashBlade.setBaseAttackModifier(tag, 1145.0F);
         // 纹理和模型（需要准备对应资源）

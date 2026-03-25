@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_rooter_strengthen",
+  "text": [
+    {
+      "text": "全力攻击后获得伤害吸收效果。"
+    }
+  ],
+  "effects": [
+    "多次强化"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

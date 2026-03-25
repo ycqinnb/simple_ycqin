@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_beckon_strengthen",
+  "text": [
+    {
+      "text": "On full attack, summon a Rupter behind the target, dealing multiple hits of damage."
+    }
+  ],
+  "effects": [
+    "Multiple enhancements",
+    "Rupter fights for you"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

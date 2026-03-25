@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_virus",
+  "text": [
+    {
+      "text": "Attacks inflict the target with the Virus buff."
+    }
+  ],
+  "effects": [
+    "Multiple enhancements"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

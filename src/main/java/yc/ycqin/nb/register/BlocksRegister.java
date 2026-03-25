@@ -20,13 +20,15 @@ public class BlocksRegister {
     public static final Block BLOCKSPFARM = new Blockspecimen_farm();
     public static final Block BLOCKSPINFECT = new Blockspecimen_infect();
     public static final Block BLOCKCROPS = new BlockCrops();
+    public static final Block BLOCKPARAASITECore = new BlockParasiteCore();
 
     private static Block[] blocks = {
             BLOCKFINALSPECIMEN,
             BLOCKSPCELL,
             BLOCKSPFARM,
             BLOCKSPINFECT,
-            BLOCKCROPS
+            BLOCKCROPS,
+            BLOCKPARAASITECore
     };
 
     // 注册方块（服务端+客户端）

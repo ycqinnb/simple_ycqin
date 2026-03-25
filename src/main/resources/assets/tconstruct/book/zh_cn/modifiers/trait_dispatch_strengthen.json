@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_dispatch_strengthen",
+  "text": [
+    {
+      "text": "为自身附加多种增益效果。"
+    }
+  ],
+  "effects": [
+    "多次强化",
+    "叠buff"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

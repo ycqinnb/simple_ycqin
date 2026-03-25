@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_dispatch_strengthen",
+  "text": [
+    {
+      "text": "Apply multiple beneficial effects to yourself."
+    }
+  ],
+  "effects": [
+    "Multiple enhancements",
+    "Stack buffs"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

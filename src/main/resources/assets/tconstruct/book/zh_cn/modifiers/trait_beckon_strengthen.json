@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_beckon_strengthen",
+  "text": [
+    {
+      "text": "全力攻击时在目标背后召唤裂兽，造成多段伤害。"
+    }
+  ],
+  "effects": [
+    "多次强化",
+    "裂兽帮你打人"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

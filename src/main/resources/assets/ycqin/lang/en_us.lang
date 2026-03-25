@@ -1,7 +1,14 @@
-item.ycqin.ycqin.name=ycqin
 itemGroup.ycqin=ycqin
+
+item.ycqin.ycqin.name=ycqin
+item.ycqin.ycqin.tooltip=§eRight-click to teleport to the Infested Dimension, right-click again to return.
+
 tile.ycqin.final_specimen.name=World Purification Core
+
 item.ycqin.upgrade.name=Overlimit Enchantment
+item.ycqin.upgrade.tooltip1=§eCombine with any enchanted item to increase all enchantment levels by 1. Max: %d
+item.ycqin.upgrade.tooltip2=§eDropped with chance from killing mobs in the Infested Dimension
+
 tile.ycqin.specimen_farm.name=Specimen Block (Agriculture)
 tile.ycqin.specimen_cell.name=Specimen Block (Cell)
 tile.ycqin.specimen_infect.name=Specimen Block (Infection)
@@ -13,3 +20,28 @@ slashblade.seffect.name.MinDamageSe=Minimum Damage
 flammpfeil.slashblade.specialattack.orb_boom=orb
 enchantment.ycqin.ycqin.yc_min_damage.desc=Deals an additional 1 point of minimum damage to enemies per level.
 enchantment.ycqin.min_damage_protect.desc=Reduces minimum damage taken by 1 point per level.
+
+tile.ycqin.parasite_core.name=Parasite Containment Core
+item.ycqin.parasite_core.tooltip1=§ePlace it in the center of a 9x9 area
+item.ycqin.parasite_core.tooltip2=§ePlace drops from Kirin and Draconite at the four corners and the midpoints of the four edges
+item.ycqin.parasite_core.tooltip3=§eActivates a multi-block structure
+
+item.ycqin.rooter_drop.name=Pillar Root Membrane
+
+modifier.trait_reduce_adaptation.name=Adaptation Reduction
+modifier.trait_reduce_adaptation.desc=Reduces the target's adaptation when attacking
+
+modifier.trait_min_damage.name=Minimum Damage
+modifier.trait_min_damage.desc=Ensures each attack deals at least the minimum damage
+
+modifier.trait_rooter_strengthen.name=Pillar Root Strengthen
+modifier.trait_rooter_strengthen.desc=Provides damage absorption on a fully charged attack
+
+modifier.trait_dispatch_strengthen.name=Dispatcher Strengthen
+modifier.trait_dispatch_strengthen.desc=Grants buffs when swinging the weapon
+
+modifier.trait_beckon_strengthen.name=Beckoner Strengthen
+modifier.trait_beckon_strengthen.desc=Deals multiple hits on a fully charged attack
+
+modifier.trait_virus.name=Virus
+modifier.trait_virus.desc=Applies a virus effect on attack

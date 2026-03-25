@@ -14,12 +14,16 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -196,6 +200,18 @@ public class EntitySlashOrbVoid extends Entity {
         int killCount = ItemSlashBlade.KillCount.get(tag);
         float baseDamage = (killCount / 10.0f) * multiplier;
         if (target.getHealth()/5 > baseDamage) baseDamage = target.getHealth()/5;
+
+        Potion viralPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("srparasites", "viral"));
+        if (viralPotion != null) {
+            PotionEffect effect = target.getActivePotionEffect(viralPotion);
+            if (effect != null) {
+                int amplifier = effect.getAmplifier(); // 0-based
+                int virusLevel = amplifier + 1;
+                float multipl = 1 + virusLevel; // 例如病毒等级4 => 倍数5
+                baseDamage = baseDamage * multiplier;
+            }
+        }
+
         float newHealth = target.getHealth() - baseDamage;
         boolean willDie = newHealth <= 0;
 

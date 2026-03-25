@@ -11,11 +11,14 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.network.datasync.DataParameter;
 import net.minecraft.network.datasync.DataSerializers;
 import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.EnumParticleTypes;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
 
@@ -244,6 +247,17 @@ public class EntitySlashOrbBoom extends Entity {
                 // 保底伤害：至少为目标当前生命值的1/5（根据您原来的逻辑）
                 if (target.getHealth() / 5 > actualDamage) {
                     actualDamage = target.getHealth() / 5;
+                }
+
+                Potion viralPotion = ForgeRegistries.POTIONS.getValue(new ResourceLocation("srparasites", "viral"));
+                if (viralPotion != null) {
+                    PotionEffect effect = target.getActivePotionEffect(viralPotion);
+                    if (effect != null) {
+                        int amplifier = effect.getAmplifier(); // 0-based
+                        int virusLevel = amplifier + 1;
+                        float multipl = 1 + virusLevel; // 例如病毒等级4 => 倍数5
+                        actualDamage = actualDamage * multiplier;
+                    }
                 }
 
                 float newHealth = target.getHealth() - actualDamage;

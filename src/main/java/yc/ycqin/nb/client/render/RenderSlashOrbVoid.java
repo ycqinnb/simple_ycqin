@@ -1,4 +1,7 @@
-package yc.ycqin.nb.render;
+package yc.ycqin.nb.client.render;
+
+import java.util.HashMap;
+import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.BufferBuilder;
@@ -10,6 +13,7 @@ import net.minecraft.client.renderer.entity.Render;
 import net.minecraft.client.renderer.entity.RenderManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.AxisAlignedBB;
 import net.minecraft.util.math.MathHelper;
@@ -17,20 +21,16 @@ import net.minecraft.util.math.Vec3d;
 import net.minecraft.util.text.TextFormatting;
 import net.minecraftforge.fml.relauncher.Side;
 import net.minecraftforge.fml.relauncher.SideOnly;
+
 import org.lwjgl.opengl.GL11;
-import yc.ycqin.nb.common.entity.EntitySlashOrbBoom;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static yc.ycqin.nb.ycqin.MODID;
+import yc.ycqin.nb.common.entity.EntitySlashOrbVoid;
 
 @SideOnly(Side.CLIENT)
-public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
+public class RenderSlashOrbVoid extends Render<EntitySlashOrbVoid> {
 
     // 纹理资源（请替换为您的实际 modid）
-    public static final ResourceLocation TEXTURES = new ResourceLocation("ycqin", "textures/entity/orbscary.png");
-    public static final ResourceLocation LIGHTNING_TEX = new ResourceLocation("ycqin", "textures/entity/orbscary_armor.png");
+    public static final ResourceLocation TEXTURES = new ResourceLocation("ycqin", "textures/entity/orbvoid.png");
+    public static final ResourceLocation LIGHTNING_TEX = new ResourceLocation("ycqin", "textures/entity/orbvoid_armor.png");
 
     private static final float SPHERE_RADIUS = 0.317F;
     private static final int SPHERE_STACKS = 18;
@@ -38,27 +38,27 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
 
     private final Map<Integer, Float> scaleSmooth = new HashMap<>();
 
-    public RenderSlashOrbScary(RenderManager renderManager) {
+    public RenderSlashOrbVoid(RenderManager renderManager) {
         super(renderManager);
     }
 
     @Override
-    protected ResourceLocation getEntityTexture(EntitySlashOrbBoom entity) {
+    protected ResourceLocation getEntityTexture(EntitySlashOrbVoid entity) {
         return TEXTURES;
     }
 
     @Override
-    public boolean shouldRender(EntitySlashOrbBoom livingEntity, ICamera camera, double camX, double camY, double camZ) {
+    public boolean shouldRender(EntitySlashOrbVoid livingEntity, ICamera camera, double camX, double camY, double camZ) {
         return true;
     }
 
     @Override
-    public void doRender(EntitySlashOrbBoom entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRender(EntitySlashOrbVoid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         super.doRender(entity, x, y, z, entityYaw, partialTicks);
         this.doRenderCosmical(entity, x, y, z, entityYaw, partialTicks);
     }
 
-    public void doRenderCosmical(EntitySlashOrbBoom entity, double x, double y, double z, float entityYaw, float partialTicks) {
+    public void doRenderCosmical(EntitySlashOrbVoid entity, double x, double y, double z, float entityYaw, float partialTicks) {
         GlStateManager.pushMatrix();
         GlStateManager.disableLighting();
 
@@ -69,7 +69,7 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
         this.renderLivingAt(entity, x, y, z);
         float ageInTicks = this.handleRotationFloat(entity, partialTicks);
         this.applyRotations(entity, ageInTicks, f, partialTicks);
-        this.prepareScaleCosmical(entity, partialTicks); // 内部调用缩放
+        this.prepareScaleCosmical(entity, partialTicks);
 
         this.renderModelCosmical(entity, partialTicks);
 
@@ -77,33 +77,34 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
         GlStateManager.popMatrix();
     }
 
-    protected void renderModelCosmical(EntitySlashOrbBoom e, float partialTicks) {
+    protected void renderModelCosmical(EntitySlashOrbVoid e, float partialTicks) {
         boolean flag = !e.isInvisibleToPlayer(Minecraft.getMinecraft().player);
         if (flag) {
             if (!this.bindEntityTextureCosmical(e)) return;
 
-            boolean cameraInside = this.isCameraInsideOrb(e, partialTicks);
             GlStateManager.enableBlend();
             GlStateManager.blendFunc(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA);
             GlStateManager.alphaFunc(516, 0.003921569F);
-            GlStateManager.depthMask(!cameraInside);
-            GlStateManager.color(1.0F, 1.0F, 1.0F, 0.35F); // 主球体透明度
+
+            // 不写入深度（但保留深度测试）
+            GlStateManager.depthMask(false);
+
+            // 渲染主球体（半透明）
+            GlStateManager.color(1.0F, 1.0F, 1.0F, e.alpha); // 使用同步后的 alpha
             this.renderTexturedSphere(SPHERE_RADIUS, SPHERE_STACKS, SPHERE_SLICES);
 
-            // 渲染辉光层前关闭深度测试
-            GlStateManager.disableDepth(); // <--- 关闭深度测试
+            // 渲染外壳（加法混合）
             GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
             this.renderChargedAura(e, partialTicks);
-            GlStateManager.enableDepth();  // <--- 恢复深度测试
 
             GlStateManager.disableBlend();
             GlStateManager.alphaFunc(516, 0.1F);
-            GlStateManager.depthMask(true);
+            GlStateManager.depthMask(true); // 恢复深度写入
             GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
         }
     }
 
-    private boolean isCameraInsideOrb(EntitySlashOrbBoom e, float partialTicks) {
+    private boolean isCameraInsideOrb(EntitySlashOrbVoid e, float partialTicks) {
         Entity view = Minecraft.getMinecraft().getRenderViewEntity();
         if (view == null) return false;
         Vec3d eye = view.getPositionEyes(partialTicks);
@@ -111,13 +112,13 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
         return bb.contains(eye);
     }
 
-    private void renderChargedAura(EntitySlashOrbBoom e, float partialTicks) {
+    private void renderChargedAura(EntitySlashOrbVoid e, float partialTicks) {
         this.bindTexture(LIGHTNING_TEX);
         GlStateManager.pushMatrix();
-        GlStateManager.scale(1.12F, 1.12F, 1.12F);
+        float sca = 1.12F;
+        GlStateManager.scale(sca, sca, sca);
         GlStateManager.depthMask(false);
         GlStateManager.enableBlend();
-        GlStateManager.blendFunc(GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ONE);
 
         float prevBX = OpenGlHelper.lastBrightnessX;
         float prevBY = OpenGlHelper.lastBrightnessY;
@@ -148,24 +149,30 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
     private void renderSwirlSphere(float radius, int stacks, int slices, float uOff, float vOff) {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder bb = tess.getBuffer();
+
         for (int i = 0; i < stacks; ++i) {
             float v0 = (float) i / (float) stacks;
             float v1 = (float) (i + 1) / (float) stacks;
             double phi0 = Math.PI * v0;
             double phi1 = Math.PI * v1;
+
             bb.begin(5, DefaultVertexFormats.POSITION_TEX);
+
             for (int j = 0; j <= slices; ++j) {
                 float u = (float) j / (float) slices;
                 double theta = (Math.PI * 2D) * u;
+
                 double x0 = Math.sin(phi0) * Math.cos(theta);
                 double y0 = Math.cos(phi0);
                 double z0 = Math.sin(phi0) * Math.sin(theta);
                 double x1 = Math.sin(phi1) * Math.cos(theta);
                 double y1 = Math.cos(phi1);
                 double z1 = Math.sin(phi1) * Math.sin(theta);
+
                 float uu = u * 2.0F + uOff;
                 float vv0 = (1.0F - v0) * 2.0F + vOff;
                 float vv1 = (1.0F - v1) * 2.0F + vOff;
+
                 bb.pos(x0 * radius, y0 * radius, z0 * radius).tex(uu, vv0).endVertex();
                 bb.pos(x1 * radius, y1 * radius, z1 * radius).tex(uu, vv1).endVertex();
             }
@@ -176,21 +183,26 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
     private void renderTexturedSphere(float radius, int stacks, int slices) {
         Tessellator tess = Tessellator.getInstance();
         BufferBuilder bb = tess.getBuffer();
+
         for (int i = 0; i < stacks; ++i) {
             float v0 = (float) i / (float) stacks;
             float v1 = (float) (i + 1) / (float) stacks;
             double phi0 = Math.PI * v0;
             double phi1 = Math.PI * v1;
+
             bb.begin(5, DefaultVertexFormats.POSITION_TEX);
+
             for (int j = 0; j <= slices; ++j) {
                 float u = (float) j / (float) slices;
                 double theta = (Math.PI * 2D) * u;
+
                 double x0 = Math.sin(phi0) * Math.cos(theta);
                 double y0 = Math.cos(phi0);
                 double z0 = Math.sin(phi0) * Math.sin(theta);
                 double x1 = Math.sin(phi1) * Math.cos(theta);
                 double y1 = Math.cos(phi1);
                 double z1 = Math.sin(phi1) * Math.sin(theta);
+
                 bb.pos(x0 * radius, y0 * radius, z0 * radius).tex(u, 1.0F - v0).endVertex();
                 bb.pos(x1 * radius, y1 * radius, z1 * radius).tex(u, 1.0F - v1).endVertex();
             }
@@ -198,62 +210,53 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
         }
     }
 
-    protected boolean bindEntityTextureCosmical(EntitySlashOrbBoom entity) {
+    protected boolean bindEntityTextureCosmical(EntitySlashOrbVoid entity) {
         ResourceLocation res = this.getEntityTexture(entity);
         if (res == null) return false;
         this.bindTexture(res);
         return true;
     }
 
-    protected void prepareScaleCosmical(EntitySlashOrbBoom e, float partialTickTime) {
+    protected void prepareScaleCosmical(EntitySlashOrbVoid e, float partialTickTime) {
         GlStateManager.enableRescaleNormal();
         GlStateManager.scale(-1.0F, -1.0F, 1.0F);
         this.preRenderCallbackCosmical(e, partialTickTime);
     }
 
-    protected void preRenderCallbackCosmical(EntitySlashOrbBoom e, float partialTickTime) {
+    protected void preRenderCallbackCosmical(EntitySlashOrbVoid e, float partialTickTime) {
         float age = (float) e.ticksExisted + partialTickTime;
 
-        // 基础缩放：基于实体当前大小，乘以一个系数使视觉大小合适
-        // 原版乘 0.8，现改为 1.5（可根据需要调整）
-        float BASE_FACTOR = 10F;
-        float base = Math.max(e.width * 2.0F, e.height * 1.9F) * BASE_FACTOR;
-
-        // 生长因子 (0~1) 平滑过渡
+        // 基础缩放：基于实体实际大小，乘以系数使视觉大小与攻击范围匹配
+        float base = Math.max(e.width, e.height) * 5.5F;
         float g = MathHelper.clamp(age / 35.0F, 0.0F, 1.0F);
-        g = g * g * (3.0F - 2.0F * g);
+        g = g * g * (3.0F - 2.0F * g); // smoothstep
 
         float normalScale = base * (0.35F + 0.95F * g);
-
-        // 弹跳效果
         float tau = MathHelper.clamp(age / 35.0F, 0.0F, 1.0F);
         float bounce = 0.28F * (float) Math.exp(-5.0F * tau) * MathHelper.sin(10.0F * tau * (float) Math.PI);
-
         float targetScale = normalScale * (1.0F + bounce);
         if (targetScale < 0.001F) targetScale = 0.001F;
 
-        // 平滑缩放（保持不变）
         int id = e.getEntityId();
-        Float prev = this.scaleSmooth.get(id);
+        Float prev = scaleSmooth.get(id);
         if (prev == null) prev = targetScale;
         float smooth = prev + (targetScale - prev) * 0.2F;
-        this.scaleSmooth.put(id, smooth);
-        if (e.isDead) this.scaleSmooth.remove(id);
+        scaleSmooth.put(id, smooth);
+        if (e.isDead) scaleSmooth.remove(id);
 
         GlStateManager.scale(smooth, smooth, smooth);
 
-        // 悬浮效果（保持不变）
         float hoverAmp = 0.05F * (0.2F + 0.8F * g);
         float hover = MathHelper.sin(age * 0.1F + (float) id * 0.3F) * hoverAmp;
         GlStateManager.translate(0.0F, hover, 0.0F);
 
-        // 自转（保持不变）
         float yaw = age * 1.4F % 360.0F;
         float pitch = 8.0F * MathHelper.sin(age * 0.07F + (float) id);
         GlStateManager.rotate(yaw, 0.0F, 1.0F, 0.0F);
         GlStateManager.rotate(pitch, 1.0F, 0.0F, 0.0F);
     }
 
+    // 辅助方法
     protected float interpolateRotation(float prevYawOffset, float yawOffset, float partialTicks) {
         float f = yawOffset - prevYawOffset;
         while (f < -180.0F) f += 360.0F;
@@ -261,15 +264,15 @@ public class RenderSlashOrbScary extends Render<EntitySlashOrbBoom> {
         return prevYawOffset + partialTicks * f;
     }
 
-    protected void renderLivingAt(EntitySlashOrbBoom entity, double x, double y, double z) {
+    protected void renderLivingAt(EntitySlashOrbVoid entity, double x, double y, double z) {
         GlStateManager.translate(x, y, z);
     }
 
-    protected float handleRotationFloat(EntitySlashOrbBoom livingBase, float partialTicks) {
+    protected float handleRotationFloat(EntitySlashOrbVoid livingBase, float partialTicks) {
         return (float) livingBase.ticksExisted + partialTicks;
     }
 
-    protected void applyRotations(EntitySlashOrbBoom entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
+    protected void applyRotations(EntitySlashOrbVoid entityLiving, float ageInTicks, float rotationYaw, float partialTicks) {
         GlStateManager.rotate(180.0F - rotationYaw, 0.0F, 1.0F, 0.0F);
         if (entityLiving.deathTime > 0) {
             float f = ((float) entityLiving.deathTime + partialTicks - 1.0F) / 20.0F * 1.6F;

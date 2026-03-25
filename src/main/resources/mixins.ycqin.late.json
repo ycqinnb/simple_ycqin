@@ -6,6 +6,8 @@
   "refmap": "mixins.ycqin.refmap.json",
   "target": "@env(DEFAULT)",
   "mixins": [
-    "MixinEntityParasiteBase"
+    "MixinEntityParasiteBase",
+    "MixinBeckonBlockInfestation",
+    "MixinBlockParasiteSpreading"
   ]
 }

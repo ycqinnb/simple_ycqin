@@ -14,12 +14,12 @@ import java.util.Random;
 
 public class BlockFinalSpecimen extends Block {
     public BlockFinalSpecimen() {
-        super(Material.GROUND, MapColor.DIRT);
+        super(Material.IRON, MapColor.DIRT);
         String name = "final_specimen";
         this.setRegistryName(name)
                 .setUnlocalizedName(ycqin.MODID+"."+name)
                 .setCreativeTab(ItemsRegister.YCQIN_TABLE)
-                .setHardness(25f)
+                .setHardness(5f)
                 .setResistance(10);
     }
 

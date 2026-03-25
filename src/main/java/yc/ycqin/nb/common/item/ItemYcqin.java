@@ -2,6 +2,7 @@ package yc.ycqin.nb.common.item;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
+import net.minecraft.client.resources.I18n;
 import net.minecraft.client.util.ITooltipFlag;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
@@ -22,6 +23,9 @@ import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldServer;
+import net.minecraftforge.fml.relauncher.Side;
+import net.minecraftforge.fml.relauncher.SideOnly;
+import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.register.BlocksRegister;
 import yc.ycqin.nb.register.ItemsRegister;
 import yc.ycqin.nb.register.SoundRegister;
@@ -46,11 +50,11 @@ public class ItemYcqin extends Item {
         this.setMaxStackSize(1);
 
     }
+
+    @SideOnly(Side.CLIENT)
     @Override
     public void addInformation(ItemStack stack, @Nullable World worldIn, List<String> tooltip, ITooltipFlag flagIn) {
-        // 添加介绍文字（可以有多行）
-        tooltip.add("§e右键传送至寄生虫维度，再次右键返回");
-        // 你可以使用颜色代码 § 来设置颜色，例如 §7 为灰色，§e 为黄色
+        tooltip.add(I18n.format("item.ycqin.ycqin.tooltip"));
     }
 
     @Override

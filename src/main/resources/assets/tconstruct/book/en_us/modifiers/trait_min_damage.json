@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_min_damage",
+  "text": [
+    {
+      "text": "Each attack deals a minimum amount of damage."
+    }
+  ],
+  "effects": [
+    "Multiple enhancements",
+    "True damage!"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

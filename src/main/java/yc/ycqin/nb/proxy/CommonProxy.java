@@ -1,55 +1,46 @@
 package yc.ycqin.nb.proxy;
 
 import com.mrcrayfish.guns.common.WorkbenchRegistry;
-import mods.flammpfeil.slashblade.ItemSlashBladeNamed;
 import mods.flammpfeil.slashblade.SlashBlade;
-import mods.flammpfeil.slashblade.item.ItemSlashBlade;
-import mods.flammpfeil.slashblade.specialeffect.SpecialEffects;
-import net.minecraft.enchantment.Enchantment;
-import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.init.Blocks;
-import net.minecraft.init.Enchantments;
-import net.minecraft.init.Items;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.potion.PotionHelper;
 import net.minecraft.potion.PotionType;
-import net.minecraft.potion.PotionUtils;
 import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.Loader;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
+import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import yc.ycqin.nb.common.blade.BladeBloodstainedSky;
 import yc.ycqin.nb.common.blade.sa.SaLoader;
-import yc.ycqin.nb.common.blade.se.MinDamageSe;
 import yc.ycqin.nb.common.blade.se.SeLoad;
 import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.event.DimensionAttributeHandler;
-import yc.ycqin.nb.event.DimensionDropHandler;
-import yc.ycqin.nb.gui.EvolutionHUD;
+import yc.ycqin.nb.event.DropHandler;
 import yc.ycqin.nb.register.*;
 import yc.ycqin.nb.srpcore.EvolutionDataManager;
 import yc.ycqin.nb.srpcore.ParasiteEvolutionSync;
 
-import java.util.HashMap;
-import java.util.Map;
-
 public class CommonProxy {
     public static boolean isSlashBladeLoaded = false;
     public static boolean isCgmModLoaded = false;
+    public static boolean isTCLoaded;
     public void preInit(FMLPreInitializationEvent event) {
         isSlashBladeLoaded = Loader.isModLoaded("flammpfeil.slashblade");
         isCgmModLoaded = Loader.isModLoaded("cgm");
+        isTCLoaded = Loader.isModLoaded("tconstruct");
         new ItemsRegister();
         new SoundRegister();
         new DimRegister();
         EvolutionDataManager.registerPackets();
         new RecipeRegister();
         new EntityRegister();
+
+
 
         // 2. 注册HUD渲染事件
 
@@ -62,13 +53,20 @@ public class CommonProxy {
 
     public void init(FMLInitializationEvent event) {
         MinecraftForge.EVENT_BUS.register(new ParasiteEvolutionSync());
-        MinecraftForge.EVENT_BUS.register(new DimensionDropHandler());
+        MinecraftForge.EVENT_BUS.register(new DropHandler());
         MinecraftForge.EVENT_BUS.register(new DimensionAttributeHandler());
         registerBrewingRecipe();
         if (isCgmModLoaded) regWorldWar();
+        if (isTCLoaded){
+            new TinkerTraitsRegister();
+        }
     }
 
-    public ItemStack getStackFromName(String modId, String path, int count) {
+    public void postInit(FMLPostInitializationEvent event) {
+
+    }
+
+    public static ItemStack getStackFromName(String modId, String path, int count) {
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
         if (item == null) {
             return ItemStack.EMPTY;
@@ -76,7 +74,7 @@ public class CommonProxy {
         return new ItemStack(item, count);
     }
 
-    private ItemStack getStackFromName(String modId, String path, int count, int meta) {
+    public static ItemStack getStackFromName(String modId, String path, int count, int meta) {
         Item item = ForgeRegistries.ITEMS.getValue(new ResourceLocation(modId, path));
         if (item == null) return ItemStack.EMPTY;
         return new ItemStack(item, count, meta);
@@ -87,8 +85,8 @@ public class CommonProxy {
         ItemStack output2 = new ItemStack(BlocksRegister.BLOCKSPFARM);
         ItemStack output3 = new ItemStack(BlocksRegister.BLOCKSPCELL);
         ItemStack output4 = new ItemStack(BlocksRegister.BLOCKSPINFECT);
+        ItemStack output5 = new ItemStack(BlocksRegister.BLOCKPARAASITECore);
 
-        // 定义材料（可变参数）
         ItemStack[] materials1 = new ItemStack[] {
                 new ItemStack(BlocksRegister.BLOCKSPCELL, 1),
                 new ItemStack(BlocksRegister.BLOCKSPINFECT, 1),
@@ -114,15 +112,24 @@ public class CommonProxy {
                 getStackFromName("srparasites", "parasiterubble", 64),
                 getStackFromName("srparasites", "biomeheart", 1)
         };
+        ItemStack[] materials5 = new ItemStack[] {
+                getStackFromName("srparasites","biomepurifier",384),
+                getStackFromName("srparasites","module_origin",1),
+                getStackFromName("srparasites","module_dislodgement",1),
+                getStackFromName("srparasites","module_vectors",1),
+                getStackFromName("srparasites","module_phase",1)
+        };
 
         // 注册配方
         WorkbenchRegistry.registerRecipe(output1, materials1);
         WorkbenchRegistry.registerRecipe(output2, materials2);
         WorkbenchRegistry.registerRecipe(output3, materials3);
         WorkbenchRegistry.registerRecipe(output4, materials4);
+        WorkbenchRegistry.registerRecipe(output5, materials5);
     }
 
     private static void registerBrewingRecipe() {
+        if (!ModConfig.isNoADEnabled) return;
         // 1. 获取反应物物品（确认物品名正确）
         Item reagentItem = Item.getByNameOrId("srparasites:dispatchern");
         if (reagentItem == null) {

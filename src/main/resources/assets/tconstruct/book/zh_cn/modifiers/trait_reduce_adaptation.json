@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_reduce_adaptation",
+  "text": [
+    {
+      "text": "攻击有一定概率削弱寄生虫的适应性。"
+    }
+  ],
+  "effects": [
+    "多次强化"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}
