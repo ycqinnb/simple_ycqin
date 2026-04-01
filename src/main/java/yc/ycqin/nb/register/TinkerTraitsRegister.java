@@ -1,7 +1,10 @@
 package yc.ycqin.nb.register;
 
 
+import slimeknights.mantle.client.book.repository.FileRepository;
 import slimeknights.tconstruct.library.TinkerRegistry;
+import slimeknights.tconstruct.library.book.TinkerBook;
+import yc.ycqin.nb.client.book.BookTransformerAppendModifiers;
 import yc.ycqin.nb.common.trait.*;
 import yc.ycqin.nb.proxy.CommonProxy;
 
@@ -28,6 +31,9 @@ public class TinkerTraitsRegister {
         traitrooterStrengthen.addItem(ItemsRegister.ROOTERDROP,1,1);
         traitVirus.addItem(CommonProxy.getStackFromName("srparasites","lurecomponent4",1),1,1);
         traitReduceAdaptation.addItem(CommonProxy.getStackFromName("srparasites","infectious_blade_fragment",1),1,1);
+    }
+    public static void addbook(){
+        TinkerBook.INSTANCE.addTransformer(new BookTransformerAppendModifiers(new FileRepository("tconstruct:book")));
     }
 
 }

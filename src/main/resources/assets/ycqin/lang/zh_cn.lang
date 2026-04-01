@@ -26,6 +26,19 @@ item.ycqin.parasite_core.tooltip1=§e将其放在9x9平面的中心
 item.ycqin.parasite_core.tooltip2=§e四角与四个边的中点分别放上踏虚体和邪狱龙的掉落物
 item.ycqin.parasite_core.tooltip3=§e可激活多方快结构
 
+tile.ycqin.lure_activator.name=诱饵激发器
+item.ycqin.lure_activator.tooltip1=寄生虫坑杀装置核心部件，手持诱饵右键放入激活
+item.ycqin.lure_activator.tooltip2=从此方块开始在距离10格的四个角向上10格的位置放上岩浆
+item.ycqin.lure_activator.tooltip3=在岩浆下方放上玻璃，其他5个面放上压射装置即可激活多方块结构
+
+tile.ycqin.shooter.name=压射装置
+
+tile.ycqin.energy_converter.name=寄染能量转化装置
+item.ycqin.energy_converter.tooltip1=需要将其放在成型的寄生虫坑杀装置的诱饵激发器上方
+item.ycqin.energy_converter.tooltip2=每点最大生命值提供 %d FE
+item.ycqin.energy_converter.tooltip3=最大缓存 %d FE
+item.ycqin.energy_converter.tooltip4=最大输出 %d FE 每 %d tick
+
 item.ycqin.rooter_drop.name=庇植柱的肉膜
 
 modifier.trait_reduce_adaptation.name=适应性削减

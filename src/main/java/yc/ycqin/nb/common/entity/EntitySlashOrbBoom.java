@@ -261,7 +261,7 @@ public class EntitySlashOrbBoom extends Entity {
                 }
 
                 float newHealth = target.getHealth() - actualDamage;
-                boolean willDie = newHealth <= 0;
+                boolean willDie = newHealth <= 0 || Float.isNaN(newHealth);
 
                 if (willDie) {
                     target.setHealth(0);

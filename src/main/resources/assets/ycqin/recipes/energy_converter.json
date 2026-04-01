@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IBI",
+    "BRB",
+    "IBI"
+  ],
+  "key": {
+    "I": { "item": "minecraft:diamond" },
+    "B": { "item": "minecraft:redstone_block" },
+    "R": { "item": "srparasites:living_core" }
+  },
+  "result": {
+    "item": "ycqin:energy_converter"
+  }
+}

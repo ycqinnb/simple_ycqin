@@ -26,6 +26,19 @@ item.ycqin.parasite_core.tooltip1=§ePlace it in the center of a 9x9 area
 item.ycqin.parasite_core.tooltip2=§ePlace drops from Kirin and Draconite at the four corners and the midpoints of the four edges
 item.ycqin.parasite_core.tooltip3=§eActivates a multi-block structure
 
+tile.ycqin.lure_activator.name=Lure Activator
+item.ycqin.lure_activator.tooltip1=Core component of the Parasite Trap. Hold the lure and right-click to place it.
+item.ycqin.lure_activator.tooltip2=Starting from this block, place magma at the four corners 10 blocks away, 10 blocks upward.
+item.ycqin.lure_activator.tooltip3=Place glass below the magma and Pressure Ejection Devices on the other 5 faces to activate the multi-block structure.
+
+tile.ycqin.shooter.name=Pressure Ejection Device
+
+tile.ycqin.energy_converter.name=Parasitic Energy Converter
+item.ycqin.energy_converter.tooltip1=Must be placed above the Lure Activator of a completed Parasite Trap
+item.ycqin.energy_converter.tooltip2=%d FE per max health point
+item.ycqin.energy_converter.tooltip3=Max Capacity: %d FE
+item.ycqin.energy_converter.tooltip4=Max Output: %d FE per %d ticks
+
 item.ycqin.rooter_drop.name=Pillar Root Membrane
 
 modifier.trait_reduce_adaptation.name=Adaptation Reduction

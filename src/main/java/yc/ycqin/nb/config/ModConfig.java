@@ -82,6 +82,21 @@ public class ModConfig {
         public static String[] defeatEpilogue;
         public static String clearSrpEntity;
     }
+    //寄生虫坑杀装置
+    public static boolean trapEnabled;
+    public static int trapLureRangeBase;
+    public static int trapLureRangePerLevel;
+    public static int[] trapLureUses;          // 按等级索引（1~10），默认值
+    public static int trapAttackCooldown;      // 攻击冷却（tick）
+    public static int trapStructureCheckInterval; // 结构检测间隔（tick）
+
+    // ----- 寄染能量转换装置 -----
+    public static boolean energyConverterEnabled;
+    public static int energyPerHealth;       // 每点生命值产生的能量
+    public static int energyMaxStorage;      // 最大储能
+    public static int energyOutputRate;       // 每次输出最大能量
+    public static int energyOutputInterval;   // 输出间隔（tick）
+
 //寄染阻断
     public static boolean isPaCoreEnabled;
     public static boolean isNoADEnabled;
@@ -394,6 +409,70 @@ public class ModConfig {
                 true,
                 "是否为“无适应性药水”添加配方（一个调度柱胞窝）"
         );
+
+        String categoryTrap = "trap_device";
+
+        trapEnabled = config.getBoolean(
+                "trapEnabled",
+                categoryTrap,
+                true,
+                "是否启用陷阱装置"
+        );
+        trapLureRangeBase = config.getInt(
+                "trapLureRangeBase",
+                categoryTrap,
+                20,
+                0,
+                200,
+                "诱饵基础吸引范围（格）"
+        );
+        trapLureRangePerLevel = config.getInt(
+                "trapLureRangePerLevel",
+                categoryTrap,
+                10,
+                0,
+                1000,
+                "每级诱饵额外增加范围（格）"
+        );
+        // 默认使用次数：1~10级依次为 10, 15, 20, 25, 30, 35, 40, 45, 50, 55
+        String[] defaultUses = new String[]{"1","5","10","15","30","45","60","90","120","150"};
+        String[] usesStr = config.getStringList(
+                "trapLureUses",
+                categoryTrap,
+                defaultUses,
+                "诱饵等级对应的可使用次数，按等级1~10顺序，10个值"
+        );
+        trapLureUses = new int[usesStr.length];
+        for (int i = 0; i < usesStr.length && i < 10; i++) {
+            try {
+                trapLureUses[i] = Integer.parseInt(usesStr[i]);
+            } catch (NumberFormatException e) {
+                trapLureUses[i] = 10;
+            }
+        }
+
+        trapAttackCooldown = config.getInt(
+                "trapAttackCooldown",
+                categoryTrap,
+                20,
+                1,
+                200,
+                "攻击冷却时间（tick），期间不会重复攻击"
+        );
+        trapStructureCheckInterval = config.getInt(
+                "trapStructureCheckInterval",
+                categoryTrap,
+                20,
+                5,
+                100,
+                "结构检测间隔（tick），数值越小检测越频繁"
+        );
+        String categoryEnergy = "energy_converter";
+        energyConverterEnabled = config.getBoolean("energyConverterEnabled", categoryEnergy, true, "是否启用寄染能量转换装置");
+        energyPerHealth = config.getInt("energyPerHealth", categoryEnergy, 100, 1, Integer.MAX_VALUE, "每点寄生虫生命值产生的能量");
+        energyMaxStorage = config.getInt("energyMaxStorage", categoryEnergy, 200000, 1, Integer.MAX_VALUE, "最大能量存储");
+        energyOutputRate = config.getInt("energyOutputRate", categoryEnergy, 20000, 1, Integer.MAX_VALUE, "每次向相邻方块输出的最大能量");
+        energyOutputInterval = config.getInt("energyOutputInterval", categoryEnergy, 1, 1, 1000, "能量输出间隔（tick）");
         // 保存变更
         if (config.hasChanged()) {
             config.save();

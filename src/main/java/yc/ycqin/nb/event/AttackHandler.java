@@ -74,7 +74,7 @@ public class AttackHandler {
 
         // 直接扣除生命值
         float newHealth = target.getHealth() - finalDamage;
-        if (newHealth < 0) newHealth = 0;
+        if (newHealth <= 0 || Float.isNaN(newHealth)) newHealth = 0;
         target.setHealth(newHealth);
 
         // 如果目标死亡，触发死亡事件

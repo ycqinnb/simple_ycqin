@@ -40,7 +40,6 @@ public class YcCommand extends CommandBase {
     public boolean checkPermission(MinecraftServer server, ICommandSender sender) {
         if (sender instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) sender;
-            // 管理员（OP）始终有权限
             return server.getPlayerList().canSendCommands(player.getGameProfile());
         }
         // 非玩家（如控制台）默认无权限，可根据需要修改

@@ -28,7 +28,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'maven-publish'
 
-version = '1.6'
+version = '1.7'
 group = 'yc.ycqin.nb' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'ycqin'
 
@@ -86,7 +86,7 @@ dependencies {
     compile files('libs/电力更多.jar')
     compile files('libs/匠魂.jar')
     compile files('libs/地幔.jar')
-    compile files('libs/tconevo.jar')
+
     // You may put jars on which you depend on in ./libs or you may define them like so..
     // compile "some.group:artifact:version:classifier"
     // compile "some.group:artifact:version"

@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "IBI",
+    "BRB",
+    "IBI"
+  ],
+  "key": {
+    "I": { "item": "minecraft:redstone_block" },
+    "B": { "type": "forge:ore_dict", "ore": "blockGlass" },
+    "R": { "item": "minecraft:iron_block" }
+  },
+  "result": {
+    "item": "ycqin:lure_activator"
+  }
+}

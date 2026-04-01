@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "pattern": [
+    "SAS",
+    "AFA",
+    "SAS"
+  ],
+  "key": {
+    "S": { "item": "minecraft:gold_ingot" },
+    "F": { "item": "minecraft:redstone" },
+    "A": { "item": "minecraft:magma" }
+  },
+  "result": {
+    "item": "ycqin:shooter",
+    "count": 1
+  }
+}

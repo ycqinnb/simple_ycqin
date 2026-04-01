@@ -6,6 +6,8 @@ import net.minecraftforge.fml.common.registry.GameRegistry;
 import yc.ycqin.nb.common.entity.EntitySlashOrbBoom;
 import yc.ycqin.nb.common.entity.EntitySlashOrbVoid;
 import yc.ycqin.nb.common.entity.EntitySummonSlash;
+import yc.ycqin.nb.common.entity.tileentity.TileEntityEnergyConverter;
+import yc.ycqin.nb.common.entity.tileentity.TileEntityLureActivator;
 import yc.ycqin.nb.common.entity.tileentity.TileEntityParasiteCore;
 import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.ycqin;
@@ -37,6 +39,8 @@ public class EntityRegister {
             );
         }
         GameRegistry.registerTileEntity(TileEntityParasiteCore.class, new ResourceLocation(ycqin.MODID, "parasite_core"));
+        GameRegistry.registerTileEntity(TileEntityLureActivator.class, new ResourceLocation(ycqin.MODID, "lure_activator"));
+        GameRegistry.registerTileEntity(TileEntityEnergyConverter.class, new ResourceLocation(ycqin.MODID, "energy_converter"));
         if (CommonProxy.isTCLoaded) {
             EntityRegistry.registerModEntity(
                     new ResourceLocation("ycqin","slashAttack"),

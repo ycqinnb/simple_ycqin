@@ -65,7 +65,7 @@ public class EnchantUpgradeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impl
             NBTTagCompound ench = enchantments.getCompoundTagAt(i).copy(); // 复制原附魔
             short lvl = ench.getShort("lvl");
             if (lvl < ModConfig.ecMixLevel) {
-                lvl++; // 等级+1（直接加，无视上限）
+                lvl++; // 等级+1
             }
             ench.setShort("lvl", lvl);
             newEnchantments.appendTag(ench);
@@ -73,6 +73,7 @@ public class EnchantUpgradeRecipe extends IForgeRegistryEntry.Impl<IRecipe> impl
 
         // 替换附魔标签
         enchantedItem.setTagInfo("ench", newEnchantments);
+        enchantedItem.setCount(1);
         return enchantedItem;
     }
 
