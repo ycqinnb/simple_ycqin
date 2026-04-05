@@ -1,0 +1,23 @@
+{
+  "armormodifier": "trait_adaptation_armor",
+  "text": [
+    {
+      "text": "伤害适应性让你吓哭，对吧？"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "没关系，我们也有！"
+    }
+  ],
+  "effects": [
+    "我也要适应！"
+  ],
+  "demoArmor": [
+    "conarm:helmet",
+    "conarm:chestplate",
+    "conarm:leggings",
+    "conarm:boots"
+  ]
+}

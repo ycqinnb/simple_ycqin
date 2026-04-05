@@ -28,8 +28,8 @@ item.ycqin.parasite_core.tooltip3=§eActivates a multi-block structure
 
 tile.ycqin.lure_activator.name=Lure Activator
 item.ycqin.lure_activator.tooltip1=Core component of the Parasite Trap. Hold the lure and right-click to place it.
-item.ycqin.lure_activator.tooltip2=Starting from this block, place magma at the four corners 10 blocks away, 10 blocks upward.
-item.ycqin.lure_activator.tooltip3=Place glass below the magma and Pressure Ejection Devices on the other 5 faces to activate the multi-block structure.
+item.ycqin.lure_activator.tooltip2=Starting from this block, place Lava at the four corners 10 blocks away, 10 blocks upward.
+item.ycqin.lure_activator.tooltip3=Place glass below the Lava and Pressure Ejection Devices on the other 5 faces to activate the multi-block structure.
 
 tile.ycqin.shooter.name=Pressure Ejection Device
 
@@ -58,3 +58,9 @@ modifier.trait_beckon_strengthen.desc=Deals multiple hits on a fully charged att
 
 modifier.trait_virus.name=Virus
 modifier.trait_virus.desc=Applies a virus effect on attack
+
+modifier.trait_min_damage_protect_armor.name=Minimum Damage Protection
+modifier.trait_min_damage_protect_armor.desc=Reduces minimum damage by 1 per level
+
+modifier.trait_adaptation_armor.name=Adaptability
+modifier.trait_adaptation_armor.desc=I have damage adaptability too!

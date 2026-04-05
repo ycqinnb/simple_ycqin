@@ -1,0 +1,23 @@
+{
+  "armormodifier": "trait_min_damage_protect_armor",
+  "text": [
+    {
+      "text": "最小伤害已经把你吓哭了，对吧？"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "本强化每级减少一点受到的最小伤害，可以让你安心点。"
+    }
+  ],
+  "effects": [
+    "不怕最小伤害！"
+  ],
+  "demoArmor": [
+    "conarm:helmet",
+    "conarm:chestplate",
+    "conarm:leggings",
+    "conarm:boots"
+  ]
+}

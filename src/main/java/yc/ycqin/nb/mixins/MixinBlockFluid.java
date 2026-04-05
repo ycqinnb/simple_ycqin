@@ -1,27 +1,19 @@
 package yc.ycqin.nb.mixins;
 
-import com.dhanantry.scapeandrunparasites.entity.ai.misc.EntityParasiteBase;
+import com.dhanantry.scapeandrunparasites.block.BlockFluid;
 import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
-import net.minecraftforge.fml.common.FMLLog;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
-import yc.ycqin.nb.enchantment.EnchantmentMinDamageProtect;
 import yc.ycqin.nb.register.ModEnchantments;
 
-@Mixin(EntityParasiteBase.class)
-public abstract class MixinEntityParasiteBase {
-
-    /**
-     * 在 attackEntityAsMobMinimum 方法开头修改 minimumDamage 参数的值
-     */
+@Mixin(BlockFluid.class)
+public class MixinBlockFluid {
     @ModifyVariable(
             method = "attackEntityAsMobMinimum",
             at = @At("HEAD"),
@@ -41,6 +33,7 @@ public abstract class MixinEntityParasiteBase {
         }
 
         int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+
         if (level > 0) {
             // 每级减少 1 点最小伤害，最低为 0
             float newMinDamage = minimumDamage - level;

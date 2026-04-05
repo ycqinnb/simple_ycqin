@@ -7,10 +7,13 @@ import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.potion.Potion;
+import net.minecraft.potion.PotionEffect;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.Vec3d;
 import net.minecraft.world.World;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import slimeknights.tconstruct.library.modifiers.IModifierDisplay;
 import slimeknights.tconstruct.library.modifiers.ModifierNBT;
 import slimeknights.tconstruct.library.modifiers.ModifierTrait;
@@ -60,8 +63,15 @@ public class TraitbeckonStrengthen extends ModifierTrait {
                 rupter.setPosition(spawnPos.x, spawnPos.y, spawnPos.z);
                 if (rupter instanceof EntityLiving) {
                     ((EntityLiving) rupter).setNoAI(true);
+                    rupter.setDropItemsWhenDead(false);
                 }
                 world.spawnEntity(rupter);
+                if (rupter instanceof EntityLivingBase) {
+                    Potion debar = ForgeRegistries.POTIONS.getValue(new ResourceLocation("srparasites", "debar"));
+                    if (debar != null) {
+                        ((EntityLivingBase) rupter).addPotionEffect(new PotionEffect(debar, 200, 0, false, false));
+                    }
+                }
             }
 
             // 生成挥砍实体，传入玩家主手物品用于渲染

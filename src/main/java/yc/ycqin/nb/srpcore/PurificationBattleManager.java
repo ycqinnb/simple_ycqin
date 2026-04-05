@@ -700,15 +700,15 @@ public class PurificationBattleManager {
         Random rand = world.rand;
 
         // 平台区域（11x11）边界
-        int platformMinX = beaconPos.getX() - 5;
-        int platformMaxX = beaconPos.getX() + 5;
-        int platformMinZ = beaconPos.getZ() - 5;
-        int platformMaxZ = beaconPos.getZ() + 5;
+        int platformMinX = beaconPos.getX() - 20;
+        int platformMaxX = beaconPos.getX() + 20;
+        int platformMinZ = beaconPos.getZ() - 20;
+        int platformMaxZ = beaconPos.getZ() + 20;
 
         while (placed < targetCount && attempts < maxAttempts) {
-            // 随机半径（96~128）
+            // 随机半径
             attempts++;
-            int radius = 512 + rand.nextInt(465); // 81 = 128-48+1
+            int radius = 256 + rand.nextInt(81);
             double angle = rand.nextDouble() * 2 * Math.PI;
             int dx = (int) (Math.cos(angle) * radius);
             int dz = (int) (Math.sin(angle) * radius);

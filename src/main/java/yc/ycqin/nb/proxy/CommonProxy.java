@@ -19,24 +19,28 @@ import yc.ycqin.nb.common.blade.BladeBloodstainedSky;
 import yc.ycqin.nb.common.blade.sa.SaLoader;
 import yc.ycqin.nb.common.blade.se.SeLoad;
 import yc.ycqin.nb.config.ModConfig;
+import yc.ycqin.nb.event.AdaptationReductionHandler;
 import yc.ycqin.nb.event.DimensionAttributeHandler;
 import yc.ycqin.nb.event.DropHandler;
 import yc.ycqin.nb.register.*;
-import yc.ycqin.nb.srpcore.EvolutionDataManager;
 import yc.ycqin.nb.srpcore.ParasiteEvolutionSync;
 
 public class CommonProxy {
     public static boolean isSlashBladeLoaded = false;
     public static boolean isCgmModLoaded = false;
-    public static boolean isTCLoaded;
+    public static boolean isTCLoaded = false;
+    public static boolean isTCArmorLoaded = false;
+    public TinkerTraitsRegister tinkerTraitsRegister;
     public void preInit(FMLPreInitializationEvent event) {
         isSlashBladeLoaded = Loader.isModLoaded("flammpfeil.slashblade");
         isCgmModLoaded = Loader.isModLoaded("cgm");
         isTCLoaded = Loader.isModLoaded("tconstruct");
+        isTCArmorLoaded = Loader.isModLoaded("conarm");
+
         new ItemsRegister();
         new SoundRegister();
         new DimRegister();
-        EvolutionDataManager.registerPackets();
+        new NetworkRegister();
         new RecipeRegister();
         new EntityRegister();
 
@@ -58,7 +62,11 @@ public class CommonProxy {
         registerBrewingRecipe();
         if (isCgmModLoaded) regWorldWar();
         if (isTCLoaded){
-            new TinkerTraitsRegister();
+           tinkerTraitsRegister = new TinkerTraitsRegister();
+        }
+        if (CommonProxy.isTCArmorLoaded){
+            tinkerTraitsRegister.regTCArmor();
+            MinecraftForge.EVENT_BUS.register(new AdaptationReductionHandler());
         }
     }
 

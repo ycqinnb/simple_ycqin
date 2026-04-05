@@ -1,0 +1,23 @@
+{
+  "armormodifier": "trait_min_damage_protect_armor",
+  "text": [
+    {
+      "text": "Minimum damage already scares you to tears, doesn't it?"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Each level of this upgrade reduces incoming minimum damage by 1 point, so you can feel a bit safer."
+    }
+  ],
+  "effects": [
+    "No fear of minimum damage!"
+  ],
+  "demoArmor": [
+    "conarm:helmet",
+    "conarm:chestplate",
+    "conarm:leggings",
+    "conarm:boots"
+  ]
+}

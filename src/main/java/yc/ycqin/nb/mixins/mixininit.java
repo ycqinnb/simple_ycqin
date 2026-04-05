@@ -6,6 +6,6 @@ import zone.rong.mixinbooter.MixinLoader;
 @MixinLoader
 public class mixininit {
     public mixininit(){
-        Mixins.addConfiguration("mixins.ycqin.late.json");//把parasitic_technology_mixin_affiliation换成你的modID
+        Mixins.addConfiguration("mixins.ycqin.late.json");
     }
 }

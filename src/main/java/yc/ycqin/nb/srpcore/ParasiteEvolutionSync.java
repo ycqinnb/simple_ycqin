@@ -11,6 +11,7 @@ import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import net.minecraftforge.fml.common.gameevent.TickEvent;
 
 import yc.ycqin.nb.network.ParasiteEvolutionPacket;
+import yc.ycqin.nb.register.NetworkRegister;
 
 public class ParasiteEvolutionSync {
     private static int tickCounter = 0;
@@ -58,8 +59,7 @@ public class ParasiteEvolutionSync {
         int total = data.getTotalKills(dim);
         int next = getNextPhasePoints(phase);
 
-        // 强制发送，不检查缓存
-        EvolutionDataManager.NETWORK.sendTo(new ParasiteEvolutionPacket(dim, phase, total, next), player);
+        NetworkRegister.NETWORK.sendTo(new ParasiteEvolutionPacket(dim, phase, total, next), player);
     }
 
      private int getNextPhasePoints(int currentPhase) {

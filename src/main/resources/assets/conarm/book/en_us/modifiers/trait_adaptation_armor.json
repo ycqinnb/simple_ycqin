@@ -1,0 +1,23 @@
+{
+  "armormodifier": "trait_adaptation_armor",
+  "text": [
+    {
+      "text": "Damage adaptability scares you to tears, doesn't it?"
+    },
+    {
+      "text": "\n"
+    },
+    {
+      "text": "Don't worry, we have it too!"
+    }
+  ],
+  "effects": [
+    "I want to adapt too!"
+  ],
+  "demoArmor": [
+    "conarm:helmet",
+    "conarm:chestplate",
+    "conarm:leggings",
+    "conarm:boots"
+  ]
+}

@@ -11,7 +11,6 @@ public class ParasiteEvolutionPacketHandler implements IMessageHandler<ParasiteE
     public IMessage onMessage(ParasiteEvolutionPacket message, MessageContext ctx) {
         if (ctx.side.isClient()) {
             Minecraft.getMinecraft().addScheduledTask(() -> {
-                System.out.println("[YcDim] Client received packet: phase=" + message.getPhase() + " points=" + message.getTotalPoints());
                 EvolutionHUD.INSTANCE.getEvolutionBar().updateParasiteData(
                         message.getPhase(),
                         message.getTotalPoints(),

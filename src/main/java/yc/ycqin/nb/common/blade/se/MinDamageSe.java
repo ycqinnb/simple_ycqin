@@ -7,9 +7,11 @@ import mods.flammpfeil.slashblade.specialeffect.ISpecialEffect;
 import mods.flammpfeil.slashblade.specialeffect.SpecialEffects;
 import mods.flammpfeil.slashblade.util.SlashBladeEvent;
 import mods.flammpfeil.slashblade.util.SlashBladeHooks;
+import net.minecraft.enchantment.EnchantmentHelper;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.util.DamageSource;
@@ -20,6 +22,8 @@ import net.minecraft.util.text.Style;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
+import yc.ycqin.nb.register.ModEnchantments;
 
 import java.util.Collections;
 import java.util.Iterator;
@@ -62,11 +66,20 @@ public class MinDamageSe implements ISpecialEffect {
                 EntityLivingBase target = (EntityLivingBase) entity;
                 if (!target.isEntityAlive()) continue;
 
+                if (target instanceof EntityPlayer) {
+                    EntityPlayer playerTarget = (EntityPlayer) target;
+                    ItemStack chest = playerTarget.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
+                    int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+                    if (level > 0) {
+                        damage = Math.max(0, damage - level); // 每级减少1点
+                    }
+                }
+
                 float newHealth = target.getHealth() - damage;
                 boolean willDie = newHealth <= 0;
 
                 if (willDie) {
-                    // 1. 使目标死亡（标记为 dead，但 deathTime 仍为0）
+                    // 1. 使目标死亡
                     target.setHealth(0);
 
                     // 2. 通知拔刀剑：这把刀击杀了目标（增加杀敌数、耀魂值等）
