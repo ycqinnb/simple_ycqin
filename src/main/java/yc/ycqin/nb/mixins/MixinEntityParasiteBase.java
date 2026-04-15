@@ -14,6 +14,7 @@ import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
 import yc.ycqin.nb.enchantment.EnchantmentMinDamageProtect;
+import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.register.ModEnchantments;
 
 @Mixin(EntityParasiteBase.class)
@@ -39,8 +40,12 @@ public abstract class MixinEntityParasiteBase {
         if (chest.isEmpty()) {
             return minimumDamage;
         }
-
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+        int level;
+        if (CommonProxy.isTCArmorLoaded) {
+            level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+        } else {
+            level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest);
+        }
         if (level > 0) {
             // 每级减少 1 点最小伤害，最低为 0
             float newMinDamage = minimumDamage - level;

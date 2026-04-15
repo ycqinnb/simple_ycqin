@@ -15,11 +15,16 @@ tile.ycqin.specimen_infect.name=Specimen Block (Infection)
 tile.ycqin.crops.name=Crop Barrel
 enchantment.min_damage_protect=Minimum Damage Protection
 enchantment.yc_min_damage=Minimum Damage
+enchantment.adaptation=Adaptation
+
+enchantment.ycqin.ycqin.yc_min_damage.desc=Deals an additional 1 point of minimum damage to enemies per level.
+enchantment.ycqin.min_damage_protect.desc=Reduces minimum damage taken by 1 point per level.
+enchantment.ycqin.adaptation.desc=Gradually adapt to damage, increasing damage reduction cap per level.
+
 item.flammpfeil.slashblade.named.bloodstained_sky.name=§4Infected Stain [Blood-washed Sky]
 slashblade.seffect.name.MinDamageSe=Minimum Damage
 flammpfeil.slashblade.specialattack.orb_boom=orb
-enchantment.ycqin.ycqin.yc_min_damage.desc=Deals an additional 1 point of minimum damage to enemies per level.
-enchantment.ycqin.min_damage_protect.desc=Reduces minimum damage taken by 1 point per level.
+
 
 tile.ycqin.parasite_core.name=Parasite Containment Core
 item.ycqin.parasite_core.tooltip1=§ePlace it in the center of a 9x9 area
@@ -40,6 +45,12 @@ item.ycqin.energy_converter.tooltip3=Max Capacity: %d FE
 item.ycqin.energy_converter.tooltip4=Max Output: %d FE per %d ticks
 
 item.ycqin.rooter_drop.name=Pillar Root Membrane
+
+item.ycqin.cooldown_amulet.name=Mindward Amulet
+item.ycqin.cooldown_amulet.tooltip=§eImmune to Fear buff and reduces the item cooldown granted by %d orb to the player
+
+item.ycqin.antidote_orb.name=Antidote Sphere
+item.ycqin.antidote_orb.tooltip=§eImmune to Viral and Poison buffs
 
 modifier.trait_reduce_adaptation.name=Adaptation Reduction
 modifier.trait_reduce_adaptation.desc=Reduces the target's adaptation when attacking

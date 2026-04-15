@@ -6,6 +6,7 @@ import net.minecraftforge.client.event.ModelRegistryEvent;
 import net.minecraftforge.client.model.ModelLoader;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yc.ycqin.nb.proxy.CommonProxy;
 
 public class ModelsRegister {
     public ModelsRegister() {
@@ -16,6 +17,10 @@ public class ModelsRegister {
         registerModel(ItemsRegister.YCQIN);
         registerModel(ItemsRegister.UPGRADE);
         registerModel(ItemsRegister.ROOTERDROP);
+        if (CommonProxy.isBaublesLoaded){
+            registerModel(ItemsRegister.CooldownAmulet);
+            registerModel(ItemsRegister.ANTIDOTEORB);
+        }
     }
 
     private void registerModel(Item item) {

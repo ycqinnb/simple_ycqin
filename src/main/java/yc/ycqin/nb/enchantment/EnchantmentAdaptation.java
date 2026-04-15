@@ -1,69 +1,102 @@
-package yc.ycqin.nb.common.trait.armorTrait;
+package yc.ycqin.nb.enchantment;
 
-import c4.conarm.lib.modifiers.ArmorModifierTrait;
+import net.minecraft.enchantment.Enchantment;
+import net.minecraft.enchantment.EnchantmentHelper;
+import net.minecraft.enchantment.EnumEnchantmentType;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.inventory.EntityEquipmentSlot;
+import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.nbt.NBTTagString;
-import net.minecraft.util.DamageSource;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.text.TextFormatting;
-import net.minecraftforge.event.entity.living.LivingHurtEvent;
-import slimeknights.tconstruct.library.utils.TagUtil;
-import slimeknights.tconstruct.library.utils.TinkerUtil;
+import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import yc.ycqin.nb.config.ModConfig;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
-public class TraitAdaptation extends ArmorModifierTrait {
-    private static final int ACTIVE_MAX = 7;
-    private static final int HIDDEN_MAX = 10;
-
-    public TraitAdaptation() {
-        super("trait_adaptation", 0x7f7f7f, 3, 16);
+public class EnchantmentAdaptation extends Enchantment {
+    public EnchantmentAdaptation() {
+        super(Rarity.VERY_RARE, EnumEnchantmentType.ARMOR, new EntityEquipmentSlot[]{
+                EntityEquipmentSlot.HEAD, EntityEquipmentSlot.CHEST, EntityEquipmentSlot.LEGS, EntityEquipmentSlot.FEET});
+        this.setName("adaptation");
+        this.setRegistryName(new ResourceLocation("ycqin", "adaptation"));
     }
 
-    // 只负责增加适应点数，不减伤
     @Override
-    public float onHurt(ItemStack armor, EntityPlayer player, DamageSource source,
-                        float damage, float newDamage, LivingHurtEvent evt) {
-        if (player.world.isRemote) return newDamage;
-
-        String damageType = getDisplayDamageType(source);
-        int level = getModifierLevel(armor);
-        if (level > 0) {
-            AdaptationData data = loadAdaptationData(armor);
-            float maxReduction = getMaxReductionPerPiece(level);
-            float current = data.getReduction(damageType);
-            float newReduction = Math.min(current + ModConfig.AdaptationIncrease, maxReduction);
-            data.putReduction(damageType, newReduction);
-            data.rebalance();
-            saveAdaptationData(armor, data);
-        }
-        // 不减伤，直接返回原值（可能已被全局事件修改）
-        return newDamage;
+    public boolean isTreasureEnchantment() {
+        return true;
     }
 
-    // 静态方法：计算玩家所有盔甲的总减伤（加法叠加，上限100%）
+    @Override
+    public int getMinEnchantability(int level) {
+        return 10 + (level - 1) * 20;
+    }
+
+    @Override
+    public int getMaxEnchantability(int level) {
+        return getMinEnchantability(level) + 30;
+    }
+
+    @Override
+    public int getMaxLevel() {
+        return 3;
+    }
+
+    // 禁止附魔到指定的寄生虫盔甲
+    @Override
+    public boolean canApply(ItemStack stack) {
+        if (!(stack.getItem() instanceof ItemArmor)) return false;
+        ResourceLocation regName = stack.getItem().getRegistryName();
+        if (regName == null) return true;
+        String fullName = regName.toString();
+        return !fullName.equals("srparasites:armor_boots_sentient") &&
+                !fullName.equals("srparasites:armor_pants_sentient") &&
+                !fullName.equals("srparasites:armor_chest_sentient") &&
+                !fullName.equals("srparasites:armor_helm_sentient") &&
+                !fullName.equals("srparasites:armor_boots") &&
+                !fullName.equals("srparasites:armor_pants") &&
+                !fullName.equals("srparasites:armor_chest") &&
+                !fullName.equals("srparasites:armor_helm");
+    }
+
+    // 获取某件盔甲上该附魔的等级（0-3）
+    public static int getLevel(ItemStack stack) {
+        return EnchantmentHelper.getEnchantmentLevel(ForgeRegistries.ENCHANTMENTS.getValue(new ResourceLocation("ycqin", "adaptation")), stack);
+    }
+
+    // 获取所有盔甲上该附魔的总减伤值（加法叠加，上限1.0）
     public static float getTotalReduction(EntityPlayer player, String damageType) {
         float total = 0f;
         for (ItemStack armor : player.getArmorInventoryList()) {
-            if (!armor.isEmpty() && TinkerUtil.hasModifier(TagUtil.getTagSafe(armor), "trait_adaptation_armor")) {
-                AdaptationData data = loadAdaptationDataStatic(armor);
-                total += data.getReduction(damageType);
+            int level = getLevel(armor);
+            if (level > 0) {
+                float current = getCurrentReduction(armor, damageType);
+                total += current;
             }
         }
         return Math.min(total, 1.0f);
     }
 
-    // ---------- 私有辅助方法 ----------
-    private int getModifierLevel(ItemStack armor) {
-        NBTTagCompound tag = TinkerUtil.getModifierTag(armor, getIdentifier());
-        return tag.getInteger("level");
+    // 为某件盔甲增加适应点数（每次受伤调用）
+    public static void addAdaptationPoint(ItemStack armor, String damageType) {
+        int level = getLevel(armor);
+        if (level == 0) return;
+        AdaptationData data = loadAdaptationData(armor);
+        float maxReduction = getMaxReductionPerPiece(level);
+        float current = data.getReduction(damageType);
+        float newReduction = Math.min(current + ModConfig.AdaptationIncrease, maxReduction); // 每次0.7%
+        data.putReduction(damageType, newReduction);
+        data.rebalance();
+        saveAdaptationData(armor, data);
     }
 
-    private float getMaxReductionPerPiece(int level) {
+    private static float getMaxReductionPerPiece(int level) {
         if (level > 3) return 1;
         switch (level) {
             case 1: return ModConfig.ReductionLevel1;
@@ -73,19 +106,17 @@ public class TraitAdaptation extends ArmorModifierTrait {
         }
     }
 
-    private String getDisplayDamageType(DamageSource source) {
-        if (source.getTrueSource() instanceof net.minecraft.entity.EntityLivingBase) {
-            net.minecraft.entity.EntityLivingBase entity = (net.minecraft.entity.EntityLivingBase) source.getTrueSource();
-            ResourceLocation regName = net.minecraft.entity.EntityList.getKey(entity);
-            if (regName != null) return regName.toString();
-            else return entity.getName();
-        } else {
-            return source.getDamageType();
-        }
+    // 获取当前减伤值（从NBT）
+    private static float getCurrentReduction(ItemStack armor, String damageType) {
+        AdaptationData data = loadAdaptationData(armor);
+        return data.getReduction(damageType);
     }
 
-    // ---------- 数据存储（静态版本供外部调用） ----------
-    private static AdaptationData loadAdaptationDataStatic(ItemStack armor) {
+    // ==================== 数据存储（与匠魂词条完全一致） ====================
+    private static final int ACTIVE_MAX = 7;
+    private static final int HIDDEN_MAX = 10;
+
+    private static AdaptationData loadAdaptationData(ItemStack armor) {
         AdaptationData data = new AdaptationData();
         NBTTagCompound tag = armor.getTagCompound();
         if (tag != null && tag.hasKey("AdaptationData")) {
@@ -110,11 +141,7 @@ public class TraitAdaptation extends ArmorModifierTrait {
         return data;
     }
 
-    private AdaptationData loadAdaptationData(ItemStack armor) {
-        return loadAdaptationDataStatic(armor);
-    }
-
-    private void saveAdaptationData(ItemStack armor, AdaptationData data) {
+    private static void saveAdaptationData(ItemStack armor, AdaptationData data) {
         NBTTagCompound tag = armor.getTagCompound();
         if (tag == null) tag = new NBTTagCompound();
         NBTTagCompound nbt = new NBTTagCompound();
@@ -141,19 +168,23 @@ public class TraitAdaptation extends ArmorModifierTrait {
         armor.setTagCompound(tag);
     }
 
-    // ---------- 工具提示 ----------
+    // 工具提示显示
     public static void addTooltip(ItemStack stack, List<String> tooltip) {
-        AdaptationData data = loadAdaptationDataStatic(stack);
+        int level = getLevel(stack);
+        if (level == 0) return;
+        AdaptationData data = loadAdaptationData(stack);
         if (!data.activeMap.isEmpty()) {
             tooltip.add(TextFormatting.DARK_PURPLE + "Current Adaptation:");
             for (String type : data.activeOrder) {
                 float reduction = data.activeMap.get(type) * 100;
                 tooltip.add(TextFormatting.YELLOW + "-> " + type + ": " + String.format("%.1f", reduction) + "%");
             }
+        } else {
+            tooltip.add(TextFormatting.GRAY + "No adaptation data yet");
         }
     }
 
-    // ---------- 内部数据结构 ----------
+    // 内部数据结构
     private static class AdaptationData {
         LinkedHashMap<String, Float> activeMap = new LinkedHashMap<>();
         LinkedHashMap<String, Float> hiddenMap = new LinkedHashMap<>();

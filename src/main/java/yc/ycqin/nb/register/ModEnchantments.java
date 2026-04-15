@@ -4,6 +4,7 @@ import net.minecraft.enchantment.Enchantment;
 import net.minecraftforge.event.RegistryEvent;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yc.ycqin.nb.enchantment.EnchantmentAdaptation;
 import yc.ycqin.nb.enchantment.EnchantmentMinDamage;
 import yc.ycqin.nb.enchantment.EnchantmentMinDamageProtect;
 
@@ -12,10 +13,12 @@ public class ModEnchantments {
 
     public static final EnchantmentMinDamageProtect MIN_DAMAGE_PROTECT = new EnchantmentMinDamageProtect();
     public static final EnchantmentMinDamage MIN_DAMAGE = new EnchantmentMinDamage();
+    public static final EnchantmentAdaptation ENCHANTMENT_ADAPTATION = new EnchantmentAdaptation();
 
     @SubscribeEvent
     public static void registerEnchantments(RegistryEvent.Register<Enchantment> event) {
         event.getRegistry().register(MIN_DAMAGE_PROTECT);
         event.getRegistry().register(MIN_DAMAGE);
+        event.getRegistry().register(ENCHANTMENT_ADAPTATION);
     }
 }

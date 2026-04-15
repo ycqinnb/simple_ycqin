@@ -30,12 +30,14 @@ public class CommonProxy {
     public static boolean isCgmModLoaded = false;
     public static boolean isTCLoaded = false;
     public static boolean isTCArmorLoaded = false;
+    public static boolean isBaublesLoaded = false;
     public TinkerTraitsRegister tinkerTraitsRegister;
     public void preInit(FMLPreInitializationEvent event) {
         isSlashBladeLoaded = Loader.isModLoaded("flammpfeil.slashblade");
         isCgmModLoaded = Loader.isModLoaded("cgm");
         isTCLoaded = Loader.isModLoaded("tconstruct");
         isTCArmorLoaded = Loader.isModLoaded("conarm");
+        isBaublesLoaded = Loader.isModLoaded("baubles");
 
         new ItemsRegister();
         new SoundRegister();
@@ -59,6 +61,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new ParasiteEvolutionSync());
         MinecraftForge.EVENT_BUS.register(new DropHandler());
         MinecraftForge.EVENT_BUS.register(new DimensionAttributeHandler());
+        MinecraftForge.EVENT_BUS.register(new AdaptationReductionHandler());
         registerBrewingRecipe();
         if (isCgmModLoaded) regWorldWar();
         if (isTCLoaded){
@@ -66,7 +69,6 @@ public class CommonProxy {
         }
         if (CommonProxy.isTCArmorLoaded){
             tinkerTraitsRegister.regTCArmor();
-            MinecraftForge.EVENT_BUS.register(new AdaptationReductionHandler());
         }
     }
 

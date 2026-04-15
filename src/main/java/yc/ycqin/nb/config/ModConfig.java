@@ -100,6 +100,15 @@ public class ModConfig {
 //寄染阻断
     public static boolean isPaCoreEnabled;
     public static boolean isNoADEnabled;
+
+    //饰品配置
+    public static float OrbReduction;
+    //附魔及词条配置
+    public static float ReductionLevel1;
+    public static float ReductionLevel2;
+    public static float ReductionLevel3;
+
+    public static float AdaptationIncrease;
     /**
      * 初始化配置文件
      */
@@ -473,6 +482,14 @@ public class ModConfig {
         energyMaxStorage = config.getInt("energyMaxStorage", categoryEnergy, 200000, 1, Integer.MAX_VALUE, "最大能量存储");
         energyOutputRate = config.getInt("energyOutputRate", categoryEnergy, 20000, 1, Integer.MAX_VALUE, "每次向相邻方块输出的最大能量");
         energyOutputInterval = config.getInt("energyOutputInterval", categoryEnergy, 1, 1, 1000, "能量输出间隔（tick）");
+
+        OrbReduction = config.getFloat("OrbReduction","bauble",0.5F,0,1,"饰品减小orb对物品施加冷却的倍率（例如0.5减少50%）");
+
+        ReductionLevel1 = config.getFloat("ReductionLevel1","enAndTr",0.05f,0,1,"每件装备1级适应性附魔或词条单个伤害来源最大可减免伤害");
+        ReductionLevel2 = config.getFloat("ReductionLevel2","enAndTr",0.15f,0,1,"每件装备2级适应性附魔或词条单个伤害来源最大可减免伤害");
+        ReductionLevel3 = config.getFloat("ReductionLevel3","enAndTr",0.25f,0,1,"每件装备3级适应性附魔或词条单个伤害来源最大可减免伤害");
+
+        AdaptationIncrease = config.getFloat("AdaptationIncrease","enAndTr",0.007f,0,1,"每次受击增加适应性数值");
         // 保存变更
         if (config.hasChanged()) {
             config.save();

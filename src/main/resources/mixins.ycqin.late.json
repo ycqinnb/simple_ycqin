@@ -10,6 +10,7 @@
     "MixinBlockFluid",
     "MixinBlockParasiteSpreading",
     "MixinEntityParasiteBase",
+    "MixinEntityPMalleable",
     "MixinPotionNeedler"
   ]
 }
