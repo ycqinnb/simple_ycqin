@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
+import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.register.ModEnchantments;
 
 @Mixin(BlockFluid.class)
@@ -32,7 +33,12 @@ public class MixinBlockFluid {
             return minimumDamage;
         }
 
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+        int level;
+        if (CommonProxy.isTCArmorLoaded){
+            level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+        } else {
+            level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest);
+        }
 
         if (level > 0) {
             // 每级减少 1 点最小伤害，最低为 0

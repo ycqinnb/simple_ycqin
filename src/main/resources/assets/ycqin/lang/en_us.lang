@@ -1,5 +1,8 @@
 itemGroup.ycqin=ycqin
 
+key.categories.ycqin=YCQIN
+key.ycqin.toggle.ShowEvoBar=open/close EvolutionStatBar
+
 item.ycqin.ycqin.name=ycqin
 item.ycqin.ycqin.tooltip=§eRight-click to teleport to the Infested Dimension, right-click again to return.
 

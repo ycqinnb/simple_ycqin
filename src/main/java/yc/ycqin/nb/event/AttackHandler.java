@@ -17,6 +17,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
+import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.register.ModEnchantments;
 
 import javax.annotation.Nullable;
@@ -62,7 +63,12 @@ public class AttackHandler {
         if (target instanceof EntityPlayer) {
             EntityPlayer player = (EntityPlayer) target;
             ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-            int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+            int level;
+            if (CommonProxy.isTCArmorLoaded){
+                level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+            } else {
+                level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest);
+            }
             if (level > 0) {
                 finalDamage = Math.max(0, finalDamage - level); // 每级减少1点
             }
@@ -91,8 +97,6 @@ public class AttackHandler {
                 source = DamageSource.OUT_OF_WORLD;
             }
             target.onDeath(source);
-            //event.setCanceled(true);
-            // Minecraft 会随后处理实体移除，无需额外调用 setDead()
         }
 
         return true;

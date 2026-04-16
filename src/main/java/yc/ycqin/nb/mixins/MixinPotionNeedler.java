@@ -10,6 +10,7 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
+import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.register.ModEnchantments;
 
 @Mixin(PotionNeedler.class)
@@ -42,7 +43,12 @@ public class MixinPotionNeedler {
         EntityPlayer player = (EntityPlayer) target;
         ItemStack chest = player.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
         if (chest.isEmpty()) return damage;
-        int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+        int level;
+        if (CommonProxy.isTCArmorLoaded){
+            level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+        } else {
+            level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest);
+        }
         if (level > 0) {
             return damage - level;
         }

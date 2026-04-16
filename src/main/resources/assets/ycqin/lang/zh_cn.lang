@@ -1,5 +1,8 @@
 itemGroup.ycqin=ycqin
 
+key.categories.ycqin=YCQIN
+key.ycqin.toggle.ShowEvoBar=开关演化进度条
+
 item.ycqin.ycqin.name=歪C
 item.ycqin.ycqin.tooltip=§e右键传送至寄染维度，再次右键返回
 

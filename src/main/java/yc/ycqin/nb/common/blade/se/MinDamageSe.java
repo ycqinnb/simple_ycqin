@@ -23,6 +23,7 @@ import net.minecraft.util.text.TextComponentString;
 import net.minecraft.world.World;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yc.ycqin.nb.common.trait.armorTrait.TraitMinDamageProtect;
+import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.register.ModEnchantments;
 
 import java.util.Collections;
@@ -69,7 +70,13 @@ public class MinDamageSe implements ISpecialEffect {
                 if (target instanceof EntityPlayer) {
                     EntityPlayer playerTarget = (EntityPlayer) target;
                     ItemStack chest = playerTarget.getItemStackFromSlot(EntityEquipmentSlot.CHEST);
-                    int level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+                    int level;
+                    if (CommonProxy.isTCArmorLoaded){
+                        level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest) + TraitMinDamageProtect.getTotalProtectionLevel(target);
+                    } else {
+                        level = EnchantmentHelper.getEnchantmentLevel(ModEnchantments.MIN_DAMAGE_PROTECT, chest);
+                    }
+
                     if (level > 0) {
                         damage = Math.max(0, damage - level); // 每级减少1点
                     }
