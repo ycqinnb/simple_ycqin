@@ -33,7 +33,6 @@ public class ProtectHelper {
             if (diff > limit && diff > 0) {
                 float corrected = last - limit;
                 if (corrected < 0) corrected = 0;
-                // 直接设置 DataManager 中的生命值
                 self.setHealth(corrected);
                 data.setFloat("yc_last_health", corrected);
                 return corrected;
