@@ -9,6 +9,7 @@ import yc.ycqin.nb.common.entity.EntitySummonSlash;
 import yc.ycqin.nb.common.entity.tileentity.TileEntityEnergyConverter;
 import yc.ycqin.nb.common.entity.tileentity.TileEntityLureActivator;
 import yc.ycqin.nb.common.entity.tileentity.TileEntityParasiteCore;
+import yc.ycqin.nb.common.entity.tileentity.TileEntityReducerCore;
 import yc.ycqin.nb.proxy.CommonProxy;
 import yc.ycqin.nb.ycqin;
 
@@ -41,6 +42,7 @@ public class EntityRegister {
         GameRegistry.registerTileEntity(TileEntityParasiteCore.class, new ResourceLocation(ycqin.MODID, "parasite_core"));
         GameRegistry.registerTileEntity(TileEntityLureActivator.class, new ResourceLocation(ycqin.MODID, "lure_activator"));
         GameRegistry.registerTileEntity(TileEntityEnergyConverter.class, new ResourceLocation(ycqin.MODID, "energy_converter"));
+        GameRegistry.registerTileEntity(TileEntityReducerCore.class,new ResourceLocation(MODID,"reducer_core"));
         if (CommonProxy.isTCLoaded) {
             EntityRegistry.registerModEntity(
                     new ResourceLocation("ycqin","slashAttack"),

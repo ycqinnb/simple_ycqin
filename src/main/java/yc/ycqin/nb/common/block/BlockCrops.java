@@ -19,7 +19,7 @@ public class BlockCrops extends Block {
         this.setRegistryName(name)
                 .setUnlocalizedName(ycqin.MODID+"."+name)
                 .setCreativeTab(ItemsRegister.YCQIN_TABLE)
-                .setHardness(25f)
+                .setHardness(5f)
                 .setResistance(10);
     }
 

@@ -47,6 +47,10 @@ item.ycqin.energy_converter.tooltip2=%d FE per max health point
 item.ycqin.energy_converter.tooltip3=Max Capacity: %d FE
 item.ycqin.energy_converter.tooltip4=Max Output: %d FE per %d ticks
 
+tile.ycqin.reducer_core.name=Reduction Core
+item.ycqin.reducer_core.tooltip1=§eFirst, place a 3x3 obsidian platform on top of the core.
+item.ycqin.reducer_core.tooltip2=§eThen, from the center of the platform, place beacons at the four corners 5 blocks away and 10 blocks above.
+
 item.ycqin.rooter_drop.name=Pillar Root Membrane
 
 item.ycqin.cooldown_amulet.name=Mindward Amulet
@@ -54,6 +58,9 @@ item.ycqin.cooldown_amulet.tooltip=§eImmune to Fear buff and reduces the item c
 
 item.ycqin.antidote_orb.name=Antidote Sphere
 item.ycqin.antidote_orb.tooltip=§eImmune to Viral and Poison buffs
+
+item.ycqin.pull_immunity_charm.name=Stability Charm
+item.ycqin.pull_immunity_charm.tooltip=§eImmune to arachnid pull
 
 modifier.trait_reduce_adaptation.name=Adaptation Reduction
 modifier.trait_reduce_adaptation.desc=Reduces the target's adaptation when attacking

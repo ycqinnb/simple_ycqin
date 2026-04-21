@@ -17,7 +17,7 @@ public class ycqin
 {
     public static final String MODID = "ycqin";
     public static final String NAME = "ycqin";
-    public static final String VERSION = "1.9.1";
+    public static final String VERSION = "2.0";
 
     @Mod.Instance(ycqin.MODID)
     public static ycqin instance;

@@ -109,6 +109,58 @@ public class ModConfig {
     public static float ReductionLevel3;
 
     public static float AdaptationIncrease;
+
+    // ========== 裂解还原装置配置 ==========
+    public static boolean reducerEnabled;                    // 是否启用装置
+    public static int reducerBeamParticleInterval;           // 光柱粒子间隔（tick），默认2
+    public static int reducerScanInterval;                   // 扫描目标间隔（tick），默认10
+
+    // 各寄生体种类对应生成的强化生物数量
+    public static int reducerSpawnCount_Derivative;          // 衍生种
+    public static int reducerSpawnCount_Ancient;             // 远古种
+    public static int reducerSpawnCount_Deceptive;           // 诡化种
+    public static int reducerSpawnCount_Abomination;         // 憎恶种
+    public static int reducerSpawnCount_Excellent;           // 卓越种
+    public static int reducerSpawnCount_Pure;                // 纯粹种
+    public static int reducerSpawnCount_Adapted;             // 适应种
+    public static int reducerSpawnCount_Feral;               // 狂化种
+    public static int reducerSpawnCount_Primitive;           // 原始种
+    public static int reducerSpawnCount_Hijacked;            // 劫持种
+    public static int reducerSpawnCount_Congenital;          // 先天种
+    public static int reducerSpawnCount_Deterrent;           // 威慑种
+    public static int reducerSpawnCount_Connective;          // 连结种
+    public static int reducerSpawnCount_Crude;               // 粗制种
+
+    // 可扩展的强化生物列表（默认敌对生物）
+    public static String[] reducerProtectedMobs;
+
+    // ----- 世界强化等级配置 -----
+    public static int upgradePoints1to2 = 200;
+    public static int upgradePoints2to3 = 400;
+    public static int upgradePoints3to4 = 800;
+    public static int upgradePoints4to5 = 1600;
+    public static int upgradePoints5to6 = 3200;
+    public static int upgradePoints6to7 = 6400;
+
+    public static int pointsOnProtectedSpawn = 1;      // 强化生物生成时增加的点数
+    public static int pointsOnProtectedDeath = -2;     // 强化生物死亡时减少的点数
+    public static int pointsOnParasiteKill = 1;        // 强化生物杀死寄生虫时增加的点数
+
+    public static float protectShieldRatio = 0.5f;     // 护盾值 = 最大生命值 * 护盾比例 * 世界等级
+    public static float blockChance = 0.3f;            // 格挡概率
+    public static int stunDuration = 100;              // 眩晕时间（tick）
+    public static float damageCapRatio = 0.25f;        // 单次伤害上限比例（生命值的百分比）
+    public static float extraDamageBase = 1.0f;        // 对寄生虫额外伤害基础值
+    public static float extraDamageMultiplierPerLevel = 2.0f; // 每级乘数
+    public static float defenseMultiplierPerLevel = 2.0f;     // 防御值每级乘数
+    public static float pullDownChance = 0.5f;         // 拉下空中寄生虫的概率
+    public static int pullDownDamage = 5;              // 拉下时造成的伤害
+    public static int pullDownStun = 60;               // 拉下后眩晕时间
+    public static float naturalSpawnChance = 0.05f;    // 自然生成强化生物的概率
+
+
+
+
     /**
      * 初始化配置文件
      */
@@ -490,6 +542,56 @@ public class ModConfig {
         ReductionLevel3 = config.getFloat("ReductionLevel3","enAndTr",0.25f,0,1,"每件装备3级适应性附魔或词条单个伤害来源最大可减免伤害");
 
         AdaptationIncrease = config.getFloat("AdaptationIncrease","enAndTr",0.007f,0,1,"每次受击增加适应性数值");
+
+        String categoryReducer = "reducer_device";
+
+        reducerEnabled = config.getBoolean("reducerEnabled", categoryReducer, true, "是否启用裂解还原装置");
+        reducerBeamParticleInterval = config.getInt("reducerBeamParticleInterval", categoryReducer, 2, 1, 20, "光柱粒子间隔（tick）");
+        reducerScanInterval = config.getInt("reducerScanInterval", categoryReducer, 10, 5, 100, "扫描目标间隔（tick）");
+
+        reducerSpawnCount_Derivative = config.getInt("reducerSpawnCount_Derivative", categoryReducer, 5, 0, 20, "衍生种裂解后生成的强化生物数量");
+        reducerSpawnCount_Ancient = config.getInt("reducerSpawnCount_Ancient", categoryReducer, 3, 0, 20, "远古种裂解后生成的强化生物数量");
+        reducerSpawnCount_Deceptive = config.getInt("reducerSpawnCount_Deceptive", categoryReducer, 2, 0, 20, "诡化种裂解后生成的强化生物数量");
+        reducerSpawnCount_Abomination = config.getInt("reducerSpawnCount_Abomination", categoryReducer, 3, 0, 20, "憎恶种裂解后生成的强化生物数量");
+        reducerSpawnCount_Excellent = config.getInt("reducerSpawnCount_Excellent", categoryReducer, 3, 0, 20, "卓越种裂解后生成的强化生物数量");
+        reducerSpawnCount_Pure = config.getInt("reducerSpawnCount_Pure", categoryReducer, 2, 0, 20, "纯粹种裂解后生成的强化生物数量");
+        reducerSpawnCount_Adapted = config.getInt("reducerSpawnCount_Adapted", categoryReducer, 1, 0, 20, "适应种裂解后生成的强化生物数量");
+        reducerSpawnCount_Feral = config.getInt("reducerSpawnCount_Feral", categoryReducer, 1, 0, 20, "狂化种裂解后生成的强化生物数量");
+        reducerSpawnCount_Primitive = config.getInt("reducerSpawnCount_Primitive", categoryReducer, 1, 0, 20, "原始种裂解后生成的强化生物数量");
+        reducerSpawnCount_Hijacked = config.getInt("reducerSpawnCount_Hijacked", categoryReducer, 1, 0, 20, "劫持种裂解后生成的强化生物数量");
+        reducerSpawnCount_Congenital = config.getInt("reducerSpawnCount_Congenital", categoryReducer, 1, 0, 20, "先天种裂解后生成的强化生物数量");
+        reducerSpawnCount_Deterrent = config.getInt("reducerSpawnCount_Deterrent", categoryReducer, 2, 0, 20, "威慑种裂解后生成的强化生物数量");
+        reducerSpawnCount_Connective = config.getInt("reducerSpawnCount_Connective", categoryReducer, 5, 0, 20, "连结种裂解后生成的强化生物数量");
+        reducerSpawnCount_Crude = config.getInt("reducerSpawnCount_Crude", categoryReducer, 1, 0, 20, "粗制种裂解后生成的强化生物数量");
+
+        String[] defaultMobs = {"minecraft:zombie", "minecraft:skeleton", "minecraft:spider","minecraft:cave_spider","minecraft:wither_skeleton","minecraft:slime","minecraft:pillager","minecraft:vindicator","minecraft:enderman"};
+        reducerProtectedMobs = config.getStringList("reducerProtectedMobs", categoryReducer, defaultMobs, "强化生物列表，使用实体注册名，可在此扩展");
+
+        // 世界强化等级阈值配置
+        upgradePoints1to2 = config.getInt("upgradePoints1to2", "world_level", 200, 1, 100000, "升到2级所需点数");
+        upgradePoints2to3 = config.getInt("upgradePoints2to3", "world_level", 400, 1, 100000, "升到3级所需点数");
+        upgradePoints3to4 = config.getInt("upgradePoints3to4", "world_level", 800, 1, 100000, "升到4级所需点数");
+        upgradePoints4to5 = config.getInt("upgradePoints4to5", "world_level", 1600, 1, 100000, "升到5级所需点数");
+        upgradePoints5to6 = config.getInt("upgradePoints5to6", "world_level", 3200, 1, 100000, "升到6级所需点数");
+        upgradePoints6to7 = config.getInt("upgradePoints6to7", "world_level", 6400, 1, 100000, "升到7级所需点数");
+
+// 事件点数变化
+        pointsOnProtectedSpawn = config.getInt("pointsOnProtectedSpawn", "world_level", 1, -10000, 10000, "强化生物生成时增加的点数");
+        pointsOnProtectedDeath = config.getInt("pointsOnProtectedDeath", "world_level", -2, -10000, 10000, "强化生物死亡时减少的点数（负数）");
+        pointsOnParasiteKill = config.getInt("pointsOnParasiteKill", "world_level", 1, -10000, 10000, "强化生物杀死寄生虫时增加的点数");
+
+// 战斗能力配置
+        protectShieldRatio = config.getFloat("protectShieldRatio", "world_level", 0.5f, 0, 10, "护盾值 = 最大生命值 * 护盾比例 * 世界等级");
+        blockChance = config.getFloat("blockChance", "world_level", 0.3f, 0, 1, "格挡寄生虫攻击的概率");
+        stunDuration = config.getInt("stunDuration", "world_level", 100, 0, 1000, "格挡后眩晕时间（tick）");
+        damageCapRatio = config.getFloat("damageCapRatio", "world_level", 0.25f, 0, 1, "单次伤害上限比例（生命值的百分比）");
+        extraDamageBase = config.getFloat("extraDamageBase", "world_level", 1.0f, 0, 10000, "对寄生虫额外伤害基础值");
+        extraDamageMultiplierPerLevel = config.getFloat("extraDamageMultiplierPerLevel", "world_level", 2.0f, 1, 100, "每级额外伤害乘数");
+        defenseMultiplierPerLevel = config.getFloat("defenseMultiplierPerLevel", "world_level", 2.0f, 1, 100, "每级防御值乘数");
+        pullDownChance = config.getFloat("pullDownChance", "world_level", 0.5f, 0, 1, "拉下空中寄生虫的概率");
+        pullDownDamage = config.getInt("pullDownDamage", "world_level", 5, 0, 1000, "拉下时造成的伤害");
+        pullDownStun = config.getInt("pullDownStun", "world_level", 60, 0, 1000, "拉下后眩晕时间（tick）");
+        naturalSpawnChance = config.getFloat("naturalSpawnChance", "world_level", 0.05f, 0, 1, "自然生成强化生物的概率（等级>2时）");
         // 保存变更
         if (config.hasChanged()) {
             config.save();

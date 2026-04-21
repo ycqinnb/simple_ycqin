@@ -24,6 +24,7 @@ public class ItemsRegister {
     public static final Item ROOTERDROP = new ItemRooterDrop();
     public static Item CooldownAmulet;
     public static Item ANTIDOTEORB;
+    public static Item PullImmunityCharm;
     public ItemsRegister() {
         MinecraftForge.EVENT_BUS.register(this);
     }
@@ -35,9 +36,11 @@ public class ItemsRegister {
         if (CommonProxy.isBaublesLoaded){
             CooldownAmulet = new ItemCooldownAmulet();
             ANTIDOTEORB = new ItemAntidoteOrb();
+            PullImmunityCharm = new ItemPullImmunityCharm();
 
             event.getRegistry().register(CooldownAmulet);
             event.getRegistry().register(ANTIDOTEORB);
+            event.getRegistry().register(PullImmunityCharm);
         }
     }
 }

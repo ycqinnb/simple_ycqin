@@ -11,6 +11,10 @@
     "MixinBlockParasiteSpreading",
     "MixinEntityParasiteBase",
     "MixinEntityPMalleable",
-    "MixinPotionNeedler"
+    "MixinParasiteEventEntity",
+    "MixinPotionNeedler",
+    "MixinSRPEffectBase",
+    "baubles.MixinEntityRanrac",
+    "baubles.MixinEntityRanracAdapted"
   ]
 }

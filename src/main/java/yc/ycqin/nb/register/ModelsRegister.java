@@ -20,6 +20,7 @@ public class ModelsRegister {
         if (CommonProxy.isBaublesLoaded){
             registerModel(ItemsRegister.CooldownAmulet);
             registerModel(ItemsRegister.ANTIDOTEORB);
+            registerModel(ItemsRegister.PullImmunityCharm);
         }
     }
 

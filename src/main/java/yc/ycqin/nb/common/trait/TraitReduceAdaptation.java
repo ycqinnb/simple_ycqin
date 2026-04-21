@@ -1,17 +1,11 @@
 package yc.ycqin.nb.common.trait;
 
 import com.dhanantry.scapeandrunparasites.entity.ai.misc.EntityPMalleable;
-import com.google.common.collect.ImmutableList;
 import net.minecraft.entity.EntityLivingBase;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import slimeknights.tconstruct.library.modifiers.ModifierNBT;
 import slimeknights.tconstruct.library.modifiers.ModifierTrait;
-import yc.ycqin.nb.proxy.CommonProxy;
-import yc.ycqin.nb.register.ItemsRegister;
-import yc.ycqin.nb.util.AdaptationHelper;
-
-import java.util.List;
+import yc.ycqin.nb.util.ParasiteHelper;
 
 public class TraitReduceAdaptation extends ModifierTrait {
 
@@ -38,7 +32,7 @@ public class TraitReduceAdaptation extends ModifierTrait {
 
         float chance = level * 0.2f;
         if (player.world.rand.nextFloat() < chance) {
-            AdaptationHelper.reduceAllResistances((EntityPMalleable) target, chance);
+            ParasiteHelper.reduceAllResistances((EntityPMalleable) target, chance,1);
         }
     }
 }

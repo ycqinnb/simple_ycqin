@@ -16,12 +16,13 @@ import net.minecraft.world.World;
 import net.minecraftforge.fml.common.registry.ForgeRegistries;
 import yc.ycqin.nb.srpcore.PurificationBattleManager;
 import yc.ycqin.nb.srpcore.PurificationWorldData;
+import yc.ycqin.nb.world.WorldLevelData;
 
 import javax.annotation.Nullable;
 import java.util.*;
 
 public class YcCommand extends CommandBase {
-    private static final List<String> SUBCOMMANDS = Arrays.asList("ForcePlaceNode","forceEnd","getWarBlock");
+    private static final List<String> SUBCOMMANDS = Arrays.asList("ForcePlaceNode","forceEnd","getWarBlock","level");
 
     @Override
     public String getName() {
@@ -100,6 +101,8 @@ public class YcCommand extends CommandBase {
                 }
             }
             player.sendMessage(new TextComponentString("坐标未找到"));
+        } else if ("level".equalsIgnoreCase(sub)) {
+            handleLevelCommand(player, args);
         } else {
             throw new WrongUsageException(getUsage(sender));
         }
@@ -120,22 +123,59 @@ public class YcCommand extends CommandBase {
                     // 补全节点类型 1~4
                     return getListOfStringsMatchingLastWord(args, "1", "2", "3", "4");
                 }
-            } else if ("item".equalsIgnoreCase(sub)) {
-                // item 子命令不提供任何补全
-                return Collections.emptyList();
             } else if ("forceEnd".equalsIgnoreCase(sub)) {
                 // forceEnd 没有后续参数，不提供补全
                 return Collections.emptyList();
             } else if ("getWarBlock".equalsIgnoreCase(sub)) {
                 // forceEnd 没有后续参数，不提供补全
                 return Collections.emptyList();
+            } else if ("level".equalsIgnoreCase(sub)) {
+                if (args.length == 2) {
+                    return getListOfStringsMatchingLastWord(args, "add", "set");
+                } else if (args.length == 3) {
+                    if ("add".equalsIgnoreCase(args[1])) {
+                        return getListOfStringsMatchingLastWord(args, "1", "10", "100", "1000");
+                    } else if ("set".equalsIgnoreCase(args[1])) {
+                        return getListOfStringsMatchingLastWord(args, "0", "200", "600", "1400", "3000", "6200", "12600");
+                    }
+                }
             }
+            return Collections.emptyList();
         }
+
         return Collections.emptyList();
     }
 
     @Override
     public boolean isUsernameIndex(String[] args, int index) {
         return false;
+    }
+
+    private void handleLevelCommand(EntityPlayer player, String[] args) throws CommandException {
+        WorldLevelData data = WorldLevelData.get(player.world);
+        if (args.length < 2) {
+            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "当前世界强化等级: " + data.getLevel()));
+            player.sendMessage(new TextComponentString(TextFormatting.GREEN + "当前点数: " + data.getPoints()));
+            return;
+        }
+
+        String action = args[1].toLowerCase();
+
+        switch (action) {
+            case "add":
+                if (args.length < 3) throw new WrongUsageException("/ycqin level add <点数>");
+                int addPoints = parseInt(args[2]);
+                data.addPoints(addPoints);
+                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "已添加 " + addPoints + " 点，当前点数: " + data.getPoints() + "，等级: " + data.getLevel()));
+                break;
+            case "set":
+                if (args.length < 3) throw new WrongUsageException("/ycqin level set <点数>");
+                int newPoints = parseInt(args[2]);
+                data.setPoints(newPoints);
+                player.sendMessage(new TextComponentString(TextFormatting.GREEN + "已设置点数为 " + newPoints + "，当前等级: " + data.getLevel()));
+                break;
+            default:
+                throw new WrongUsageException("/ycqin level <add|set> [数值]");
+        }
     }
 }

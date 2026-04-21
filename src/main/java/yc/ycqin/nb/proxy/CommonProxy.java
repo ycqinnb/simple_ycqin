@@ -22,6 +22,7 @@ import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.event.AdaptationReductionHandler;
 import yc.ycqin.nb.event.DimensionAttributeHandler;
 import yc.ycqin.nb.event.DropHandler;
+import yc.ycqin.nb.event.ProtectedMobHandler;
 import yc.ycqin.nb.register.*;
 import yc.ycqin.nb.srpcore.ParasiteEvolutionSync;
 
@@ -62,6 +63,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new DropHandler());
         MinecraftForge.EVENT_BUS.register(new DimensionAttributeHandler());
         MinecraftForge.EVENT_BUS.register(new AdaptationReductionHandler());
+        MinecraftForge.EVENT_BUS.register(new ProtectedMobHandler());
         registerBrewingRecipe();
         if (isCgmModLoaded) regWorldWar();
         if (isTCLoaded){

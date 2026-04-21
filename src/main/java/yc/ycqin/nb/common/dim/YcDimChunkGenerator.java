@@ -32,9 +32,8 @@ public class YcDimChunkGenerator implements IChunkGenerator {
     private final IBlockState stone = Blocks.STONE.getDefaultState();
     private final IBlockState water = Blocks.WATER.getDefaultState();
 
-    // 寄生方块（从 SRP 获取）
-    private final IBlockState infestedStone;
-    private final IBlockState infestedDirt;
+    private final IBlockState parasiteStone;
+    private final IBlockState parasiteDirt;
 
     // 节点放置标志（确保只尝试一次）
     private boolean nodePlaced = false;
@@ -46,11 +45,11 @@ public class YcDimChunkGenerator implements IChunkGenerator {
         this.noiseGen = new NoiseGeneratorPerlin(this.random, 4);
 
         // 获取 SRP 寄生方块
-        Block rubble = Block.REGISTRY.getObject(new ResourceLocation("srparasites", "infestedrubble"));
-        infestedStone = rubble != null ? rubble.getDefaultState() : stone; // 后备为石头
+        Block rubble = Block.REGISTRY.getObject(new ResourceLocation("srparasites", "parasiterubble"));
+        parasiteStone = rubble != null ? rubble.getStateFromMeta(2) : Blocks.STONE.getDefaultState();
 
-        Block stain = Block.REGISTRY.getObject(new ResourceLocation("srparasites", "infestedstain"));
-        infestedDirt = stain != null ? stain.getDefaultState() : Blocks.DIRT.getDefaultState(); // 后备为泥土
+        Block stain = Block.REGISTRY.getObject(new ResourceLocation("srparasites", "parasitestain"));
+        parasiteDirt = stain != null ? stain.getDefaultState() : Blocks.DIRT.getDefaultState();
     }
 
     @Override
@@ -130,10 +129,10 @@ public class YcDimChunkGenerator implements IChunkGenerator {
                 for (int y = 0; y < 256; ++y) {
                     IBlockState state = primer.getBlockState(localX, y, localZ);
                     if (state.getBlock() == Blocks.STONE) {
-                        primer.setBlockState(localX, y, localZ, infestedStone);
+                        primer.setBlockState(localX, y, localZ, parasiteStone);
                     } else if (state.getBlock() == Blocks.DIRT && state == Blocks.DIRT.getDefaultState()) {
                         // 只替换普通泥土（metadata 0），不替换草方块、砂土等
-                        primer.setBlockState(localX, y, localZ, infestedDirt);
+                        primer.setBlockState(localX, y, localZ, parasiteDirt);
                     }
                 }
             }
@@ -154,21 +153,8 @@ public class YcDimChunkGenerator implements IChunkGenerator {
     }
 
     private void ensureNodePlaced() {
-        //BlockPos nodePos = new BlockPos(0, 10, 0);
-
-        // 1. 设置演化阶段为10
         ensurePhase10(world);
-
         nodePlaced = true;
-
-        // 3. 放置节点（类型1为默认节点）
-        //int result = ParasiteEventWorld.placeHeartInWorld(world, nodePos, 1);
-        //if (result == 1 || result == 8) { // 成功 或 太靠近另一个节点（视为已存在）
-        //    nodePlaced = true;
-        //    System.out.println("[YcDim] Node placed successfully at (0,10,0)");
-       // } else {
-        //    System.out.println("[YcDim] Failed to place node at (0,10,0), error code: " + result);
-       // }
     }
 
     private void ensurePhase10(World world) {
@@ -204,24 +190,5 @@ public class YcDimChunkGenerator implements IChunkGenerator {
     @Override
     public boolean isInsideStructure(World worldIn, String structureName, BlockPos pos) {
         return false;
-    }
-
-    private static void addDimensionToSRPWhitelist(int dimId) {
-        try {
-            // 反射获取 blackListedDimensionsNodes 字段
-            Field field = SRPConfigWorld.class.getField("blackListedDimensionsNodes");
-            field.setAccessible(true);
-            int[] original = (int[]) field.get(null);
-            // 检查是否已存在
-            for (int id : original) {
-                if (id == dimId) return;
-            }
-            // 创建新数组
-            int[] newArray = Arrays.copyOf(original, original.length + 1);
-            newArray[original.length] = dimId;
-            field.set(null, newArray);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

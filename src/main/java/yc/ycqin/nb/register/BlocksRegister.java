@@ -24,6 +24,7 @@ public class BlocksRegister {
     public static final Block BLOCKLUREACTIVATOR = new BlockLureActivator();
     public static final Block BLOCKSHOOTER = new BlockShooter();
     public static final Block BLOCKENERGYCONVERTER = new BlockEnergyConverter();
+    public static final Block BLOCKREDUCECORE = new BlockReducerCore();
 
     private static Block[] blocks = {
             BLOCKFINALSPECIMEN,
@@ -34,7 +35,8 @@ public class BlocksRegister {
             BLOCKPARAASITECore,
             BLOCKLUREACTIVATOR,
             BLOCKSHOOTER,
-            BLOCKENERGYCONVERTER
+            BLOCKENERGYCONVERTER,
+            BLOCKREDUCECORE
     };
 
     // 注册方块（服务端+客户端）
