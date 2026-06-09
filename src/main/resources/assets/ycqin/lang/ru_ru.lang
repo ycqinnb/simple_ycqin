@@ -1,0 +1,94 @@
+itemGroup.ycqin=ycqin
+
+key.categories.ycqin=YCQIN
+
+item.ycqin.ycqin.name=ycqin
+item.ycqin.ycqin.tooltip=§eПКМ для телепортации в Заражённое измерение, ПКМ снова для возврата.
+
+item.ycqin.recruitment_order.name=Вербовочный ордер
+item.ycqin.recruitment_order.tooltip=§eПКМ по неприручённому усиленному существу для вербовки
+
+item.ycqin.fog_goggles.name=Туманные очки
+item.ycqin.fog_goggles.tooltip1=§eПри ношении дают иммунитет к серому туману
+item.ycqin.fog_goggles.tooltip2=§eСовместите с любым шлемом, чтобы передать эффект
+item.ycqin.fog_goggles.tooltip3=Эффект туманных очков применён
+
+item.ycqin.upgrade.name=Зачарование «Превышение предела»
+item.ycqin.upgrade.tooltip1=§eСовместите с любым зачарованным предметом, чтобы увеличить все уровни чар на 1. Макс: %d
+item.ycqin.upgrade.tooltip2=§eВыпадает с шансом при убийстве мобов в Заражённом измерении
+
+enchantment.min_damage_protect=Защита от минимального урона
+enchantment.yc_min_damage=Минимальный урон
+enchantment.adaptation=Адаптация
+
+enchantment.ycqin.ycqin.yc_min_damage.desc=Наносит врагам дополнительно 1 единицу минимального урона за уровень.
+enchantment.ycqin.min_damage_protect.desc=Уменьшает получаемый минимальный урон на 1 единицу за уровень.
+enchantment.ycqin.adaptation.desc=Постепенно адаптируется к урону, увеличивая предел снижения урона за уровень.
+
+item.flammpfeil.slashblade.named.bloodstained_sky.name=§4Заражённый клинок [Омытое кровью небо]
+slashblade.seffect.name.MinDamageSe=Минимальный урон
+flammpfeil.slashblade.specialattack.orb_boom=сфера
+
+tile.ycqin.parasite_core.name=Ядро удержания паразитов
+item.ycqin.parasite_core.tooltip1=§eРазместите в центре области 9x9
+item.ycqin.parasite_core.tooltip2=§eПоместите предметы, выпадающие с Кирина и Драконита, по четырём углам и серединам четырёх сторон
+item.ycqin.parasite_core.tooltip3=§eАктивирует многоблочную структуру
+
+tile.ycqin.lure_activator.name=Активатор приманки
+item.ycqin.lure_activator.tooltip1=Основной компонент ловушки на паразитов. Держите приманку и нажмите ПКМ, чтобы разместить.
+item.ycqin.lure_activator.tooltip2=Начиная с этого блока, разместите лаву по четырём углам на расстоянии 10 блоков и на 10 блоков выше.
+item.ycqin.lure_activator.tooltip3=Разместите стекло под лавой и устройства выброса давления на остальных 5 гранях, чтобы активировать многоблочную структуру.
+
+tile.ycqin.shooter.name=Устройство выброса давления
+
+tile.ycqin.energy_converter.name=Конвертер паразитической энергии
+item.ycqin.energy_converter.tooltip1=Должен быть размещён над активатором приманки в завершённой ловушке паразитов
+item.ycqin.energy_converter.tooltip2=%d FE за единицу максимального здоровья
+item.ycqin.energy_converter.tooltip3=Макс. ёмкость: %d FE
+item.ycqin.energy_converter.tooltip4=Макс. выдача: %d FE за %d тактов
+
+tile.ycqin.reducer_core.name=Ядро редукции
+item.ycqin.reducer_core.tooltip1=§eСначала разместите платформу из обсидиана 3x3 поверх ядра.
+item.ycqin.reducer_core.tooltip2=§eЗатем от центра платформы разместите маяки по четырём углам на расстоянии 5 блоков и на 10 блоков выше.
+
+item.ycqin.rooter_drop.name=Мембрана корня-столпа
+
+item.ycqin.cooldown_amulet.name=Амулет защиты разума
+item.ycqin.cooldown_amulet.tooltip=§eИммунитет к эффекту Страха и уменьшает перезарядку предмета, даваемую %d сферой игроку
+item.ycqin.cooldown_amulet.tooltip2=§eПоддерживает рассудок полным и даёт 2 смелости каждые 5 секунд.
+
+item.ycqin.antidote_orb.name=Сфера-противоядие
+item.ycqin.antidote_orb.tooltip=§eИммунитет к эффектам Вируса и Отравления
+
+item.ycqin.pull_immunity_charm.name=Талисман стабильности
+item.ycqin.pull_immunity_charm.tooltip=§eИммунитет к притягиванию паукообразных
+
+modifier.trait_reduce_adaptation.name=Снижение адаптации
+modifier.trait_reduce_adaptation.desc=Снижает адаптацию цели при атаке
+
+modifier.trait_min_damage.name=Минимальный урон
+modifier.trait_min_damage.desc=Гарантирует, что каждая атака наносит как минимум минимальный урон
+
+modifier.trait_rooter_strengthen.name=Усиление корня-столпа
+modifier.trait_rooter_strengthen.desc=Даёт поглощение урона при полностью заряженной атаке
+
+modifier.trait_dispatch_strengthen.name=Усиление диспетчера
+modifier.trait_dispatch_strengthen.desc=Даёт положительные эффекты при размахивании оружием
+
+modifier.trait_beckon_strengthen.name=Усиление призывателя
+modifier.trait_beckon_strengthen.desc=Наносит несколько ударов при полностью заряженной атаке
+
+modifier.trait_virus.name=Вирус
+modifier.trait_virus.desc=Накладывает эффект вируса при атаке
+
+modifier.trait_min_damage_protect_armor.name=Защита от минимального урона
+modifier.trait_min_damage_protect_armor.desc=Уменьшает минимальный урон на 1 за уровень
+
+modifier.trait_adaptation_armor.name=Адаптивность
+modifier.trait_adaptation_armor.desc=У меня тоже есть адаптация к урону!
+
+effect.ycqin.stun=Оглушение
+potion.effect.ycqin:stun=Зелье оглушения
+splash_potion.effect.ycqin:stun=Взрывное зелье оглушения
+lingering_potion.effect.ycqin:stun=Туманное зелье оглушения
+tipped_arrow.effect.ycqin:stun=Стрела оглушения
