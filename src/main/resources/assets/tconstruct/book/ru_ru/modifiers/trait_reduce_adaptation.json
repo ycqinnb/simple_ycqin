@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_reduce_adaptation",
+  "text": [
+    {
+      "text": "Атаки имеют шанс снизить адаптацию паразита."
+    }
+  ],
+  "effects": [
+    "Множественные усиления"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

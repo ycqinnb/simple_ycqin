@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_dispatch_strengthen",
+  "text": [
+    {
+      "text": "Применяет на вас несколько положительных эффектов."
+    }
+  ],
+  "effects": [
+    "Множественные усиления",
+    "Накопление баффов"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

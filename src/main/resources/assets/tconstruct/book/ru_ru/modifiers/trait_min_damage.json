@@ -1,0 +1,15 @@
+{
+  "modifier": "trait_min_damage",
+  "text": [
+    {
+      "text": "Каждая атака наносит минимальное количество урона."
+    }
+  ],
+  "effects": [
+    "Множественные усиления",
+    "Истинный урон!"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

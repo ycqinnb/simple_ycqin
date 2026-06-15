@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_virus",
+  "text": [
+    {
+      "text": "Атаки накладывают на цель эффект Вируса."
+    }
+  ],
+  "effects": [
+    "Множественные усиления"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}

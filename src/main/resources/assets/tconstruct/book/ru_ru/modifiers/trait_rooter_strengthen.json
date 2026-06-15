@@ -1,0 +1,14 @@
+{
+  "modifier": "trait_rooter_strengthen",
+  "text": [
+    {
+      "text": "После полностью заряженной атаки получает эффект поглощения."
+    }
+  ],
+  "effects": [
+    "Множественные усиления"
+  ],
+  "demoTool": [
+    "tconstruct:broadsword"
+  ]
+}
