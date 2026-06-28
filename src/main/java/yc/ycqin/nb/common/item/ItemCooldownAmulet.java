@@ -83,7 +83,7 @@ public class ItemCooldownAmulet extends Item implements IBauble {
         if (player.isPotionActive(FEAR_E)) {
             player.removePotionEffect(FEAR_E);
         }
-        if (!CommonProxy.isOverLoaded) return;
+        if (!CommonProxy.isOverLoaded || !CommonProxy.isOverCourageLoaded) return;
         if (player instanceof EntityPlayer) {
             EntityPlayer ep = (EntityPlayer) player;
             World world = ep.world;

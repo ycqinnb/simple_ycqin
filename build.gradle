@@ -28,7 +28,7 @@ apply plugin: 'eclipse'
 apply plugin: 'org.spongepowered.mixin'
 apply plugin: 'maven-publish'
 
-version = '2.0.1'
+version = '2.0.2-pre1'
 group = 'yc.ycqin.nb' // http://maven.apache.org/guides/mini/guide-naming-conventions.html
 archivesBaseName = 'ycqin'
 
@@ -80,7 +80,7 @@ dependencies {
     minecraft 'net.minecraftforge:forge:1.12.2-14.23.5.2860'
     compileOnly "curse.maven:draconic-evolution-223565:3431261"
     compileOnly 'curse.maven:mixin-booter-419286:7049694'
-    compile files('libs/SRP1104.jar')
+    compile deobf(files('libs/SRP1107.jar'))
     compile files('libs/guns-0.15.3-1.12.2.jar')
     compile files('libs/拔刀剑.jar')
     compile files('libs/匠魂.jar')

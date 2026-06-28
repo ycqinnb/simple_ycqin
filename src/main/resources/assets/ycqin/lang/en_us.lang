@@ -93,3 +93,9 @@ potion.effect.ycqin:stun=Potion of Stun
 splash_potion.effect.ycqin:stun=Splash Potion of Stun
 lingering_potion.effect.ycqin:stun=Lingering Potion of Stun
 tipped_arrow.effect.ycqin:stun=Arrow of Stun
+
+effect.ycqin.confusion=Confusion
+potion.effect.ycqin:confusion=Potion of Confusion
+splash_potion.effect.ycqin:confusion=Splash Potion of Confusion
+lingering_potion.effect.ycqin:confusion=Lingering Potion of Confusion
+tipped_arrow.effect.ycqin:confusion=Arrow of Confusion

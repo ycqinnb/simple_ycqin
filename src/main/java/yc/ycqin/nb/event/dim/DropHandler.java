@@ -1,6 +1,5 @@
-package yc.ycqin.nb.event;
+package yc.ycqin.nb.event.dim;
 
-import com.dhanantry.scapeandrunparasites.entity.ai.misc.EntityPRooter;
 import com.dhanantry.scapeandrunparasites.entity.monster.deterrent.nexus.EntityLeem;
 import com.dhanantry.scapeandrunparasites.entity.monster.deterrent.nexus.EntityLeemSII;
 import com.dhanantry.scapeandrunparasites.entity.monster.deterrent.nexus.EntityLeemSIII;
@@ -13,7 +12,6 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.world.World;
 import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingDropsEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.register.ItemsRegister;

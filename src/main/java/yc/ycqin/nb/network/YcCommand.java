@@ -10,11 +10,17 @@ import net.minecraft.command.CommandException;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.command.WrongUsageException;
 import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.entity.player.EntityPlayerMP;
 import net.minecraft.server.MinecraftServer;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.TextComponentString;
 import net.minecraft.util.text.TextFormatting;
+import net.minecraft.world.Teleporter;
 import net.minecraft.world.World;
+import net.minecraft.world.WorldServer;
+import net.minecraftforge.common.DimensionManager;
+import yc.ycqin.nb.common.dim.MirageManager;
+import yc.ycqin.nb.common.dim.TeleporterDirect;
 import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.world.WorldLevelData;
 
@@ -23,7 +29,7 @@ import java.lang.reflect.Field;
 import java.util.*;
 
 public class YcCommand extends CommandBase {
-    private static final List<String> SUBCOMMANDS = Arrays.asList("ForcePlaceNode","level");
+    private static final List<String> SUBCOMMANDS = Arrays.asList("ForcePlaceNode","level","mirage");
 
     @Override
     public String getName() {
@@ -105,6 +111,16 @@ public class YcCommand extends CommandBase {
         //    player.sendMessage(new TextComponentString("坐标未找到"));}
          else if ("level".equalsIgnoreCase(sub)) {
             handleLevelCommand(player, args);
+        } else if ("mirage".equalsIgnoreCase(sub)) {
+            if (args.length < 2) {
+                throw new WrongUsageException("/ycqin mirage leave  退出幻境");
+            }
+            String action = args[1];
+            if ("leave".equalsIgnoreCase(action)) {
+                handleLeaveMirage(player);
+            } else {
+                throw new WrongUsageException("/ycqin mirage leave  退出幻境");
+            }
         } else {
             throw new WrongUsageException(getUsage(sender));
         }
@@ -134,6 +150,10 @@ public class YcCommand extends CommandBase {
                     } else if ("set".equalsIgnoreCase(args[1])) {
                         return getListOfStringsMatchingLastWord(args, "0", "200", "600", "1400", "3000", "6200", "12600");
                     }
+                }
+            } else if ("mirage".equalsIgnoreCase(sub)) {
+                if (args.length == 2) {
+                    return getListOfStringsMatchingLastWord(args, "leave");
                 }
             }
             return Collections.emptyList();
@@ -249,5 +269,29 @@ public class YcCommand extends CommandBase {
                 System.out.println("普通放置失败，错误码：" + result);
             }
         }
+    }
+
+    private void handleLeaveMirage(EntityPlayer player) {
+        if (!MirageManager.isMirageDimension(player.dimension)) {
+            player.sendMessage(new TextComponentString(TextFormatting.YELLOW + "你不在幻境中。"));
+            return;
+        }
+        int originalDim = MirageManager.getOriginalDim(player.dimension);
+        WorldServer targetWorld = player.getServer().getWorld(originalDim);
+        if (targetWorld == null) {
+            // 尝试加载世界
+            DimensionManager.initDimension(originalDim);
+            targetWorld = player.getServer().getWorld(originalDim);
+            if (targetWorld == null) {
+                player.sendMessage(new TextComponentString(TextFormatting.RED + "目标世界加载失败，请联系管理员。"));
+                return;
+            }
+        }
+
+        // 保留当前坐标，清除幻境标记并传送
+        BlockPos currentPos = player.getPosition();
+        player.getEntityData().removeTag("inMirage");
+        ((EntityPlayerMP) player).changeDimension(originalDim, new TeleporterDirect(targetWorld, currentPos, 0));
+        player.sendMessage(new TextComponentString(TextFormatting.GREEN + "你已离开幻境。"));
     }
 }

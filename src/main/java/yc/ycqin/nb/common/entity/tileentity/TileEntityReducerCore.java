@@ -151,57 +151,69 @@ public class TileEntityReducerCore extends TileEntity implements ITickable {
             }
         }
     }
-
     /**
-     * 检测多方块结构
-     * 结构要求：
-     * 1. 核心方块上方放置3x3黑曜石平台（核心正上方为平台中心）
-     * 2. 在平台上方10格高度的四个角各放置一个信标，信标面向核心方向
+     * 检测结构并返回缺失信息列表
+     * @param update 是否将检测结果更新到内部状态（用于tick和客户端同步）
+     * @return 每一条缺失信息，若完整则返回 "§a结构完整！"
      */
-    private void checkStructure() {
-        beaconPositions.clear();
+    public List<String> getStructureStatus(boolean update) {
+        List<String> messages = new ArrayList<>();
         boolean valid = true;
 
-        // 获取平台中心位置（核心正上方）
-        platformCenter = pos.up();
+        BlockPos center = pos.up(); // 平台中心
 
-        // 检查3x3黑曜石平台
+        // 检查黑曜石
         for (int dx = -1; dx <= 1; dx++) {
             for (int dz = -1; dz <= 1; dz++) {
-                BlockPos checkPos = platformCenter.add(dx, 0, dz);
-                IBlockState state = world.getBlockState(checkPos);
-                if (state.getBlock() != Blocks.OBSIDIAN) {
+                BlockPos checkPos = center.add(dx, 0, dz);
+                if (world.getBlockState(checkPos).getBlock() != Blocks.OBSIDIAN) {
                     valid = false;
-                    break;
+                    messages.add(String.format("缺失黑曜石 → 世界坐标 (%d, %d, %d)",
+                            checkPos.getX(), checkPos.getY(), checkPos.getZ()));
                 }
             }
-            if (!valid) break;
         }
 
-        if (!valid) {
-            structureValid = false;
-            return;
-        }
-
-        // 检查四个角的信标（平台上方10格高度）
+        // 检查信标
         int yOffset = 10;
         int[][] corners = {{-5, -5}, {5, -5}, {-5, 5}, {5, 5}};
-
         for (int[] corner : corners) {
             BlockPos beaconPos = new BlockPos(
-                    platformCenter.getX() + corner[0],
-                    platformCenter.getY() + yOffset,
-                    platformCenter.getZ() + corner[1]
+                    center.getX() + corner[0],
+                    center.getY() + yOffset,
+                    center.getZ() + corner[1]
             );
-            IBlockState state = world.getBlockState(beaconPos);
-            if (state.getBlock() != Blocks.BEACON) {
+            if (world.getBlockState(beaconPos).getBlock() != Blocks.BEACON) {
                 valid = false;
-                break;
+                messages.add(String.format("缺失信标 → 世界坐标 (%d, %d, %d)",
+                        beaconPos.getX(), beaconPos.getY(), beaconPos.getZ()));
             }
-            beaconPositions.add(beaconPos);
         }
 
-        structureValid = valid;
+        if (valid) messages.add("§a结构完整！");
+
+        if (update) {
+            this.structureValid = valid;
+            this.platformCenter = center;
+            beaconPositions.clear();
+            if (valid) {
+                for (int[] corner : corners) {
+                    beaconPositions.add(new BlockPos(
+                            center.getX() + corner[0],
+                            center.getY() + yOffset,
+                            center.getZ() + corner[1]
+                    ));
+                }
+            }
+            syncToTrackingClients();
+        }
+
+        return messages;
+    }
+
+    // 修改原有的 checkStructure，改为调用新方法
+    private void checkStructure() {
+        getStructureStatus(true); // 更新状态，消息忽略
     }
 
     /**

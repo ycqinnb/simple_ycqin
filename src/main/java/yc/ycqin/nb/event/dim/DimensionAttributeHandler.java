@@ -1,22 +1,15 @@
-package yc.ycqin.nb.event;
+package yc.ycqin.nb.event.dim;
 
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.SharedMonsterAttributes;
-import net.minecraft.entity.ai.attributes.AbstractAttributeMap;
 import net.minecraft.entity.ai.attributes.AttributeModifier;
 import net.minecraft.entity.ai.attributes.IAttribute;
 import net.minecraft.entity.ai.attributes.IAttributeInstance;
-import net.minecraft.entity.player.EntityPlayer;
 import net.minecraftforge.event.entity.living.LivingSpawnEvent;
-import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import yc.ycqin.nb.config.ModConfig;
-import yc.ycqin.nb.register.DimRegister;
 import yc.ycqin.nb.util.AttributeHelper;
-import yc.ycqin.nb.ycqin;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.UUID;
 
 public class DimensionAttributeHandler {

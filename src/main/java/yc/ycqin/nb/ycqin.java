@@ -5,13 +5,11 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.SidedProxy;
-import net.minecraftforge.fml.common.event.FMLInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.event.FMLServerStartingEvent;
+import net.minecraftforge.fml.common.event.*;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 import net.minecraftforge.fml.common.gameevent.PlayerEvent;
 import org.apache.logging.log4j.Logger;
+import yc.ycqin.nb.common.dim.MirageManager;
 import yc.ycqin.nb.common.item.ItemCooldownAmulet;
 import yc.ycqin.nb.network.YcCommand;
 import yc.ycqin.nb.proxy.CommonProxy;
@@ -21,7 +19,7 @@ public class ycqin
 {
     public static final String MODID = "ycqin";
     public static final String NAME = "ycqin";
-    public static final String VERSION = "2.0.1";
+    public static final String VERSION = "2.0.2-pre1";
 
     @Mod.Instance(ycqin.MODID)
     public static ycqin instance;

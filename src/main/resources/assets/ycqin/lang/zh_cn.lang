@@ -96,3 +96,9 @@ potion.effect.ycqin:stun=眩晕药水
 splash_potion.effect.ycqin:stun=喷溅型眩晕药水
 lingering_potion.effect.ycqin:stun=滞留型眩晕药水
 tipped_arrow.effect.ycqin:stun=眩晕之箭
+
+effect.ycqin.confusion=混乱
+potion.effect.ycqin:confusion=混乱药水
+splash_potion.effect.ycqin:confusion=喷溅型混乱药水
+lingering_potion.effect.ycqin:confusion=滞留型混乱药水
+tipped_arrow.effect.ycqin:confusion=混乱之箭

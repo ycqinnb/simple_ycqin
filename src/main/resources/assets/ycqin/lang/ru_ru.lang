@@ -92,3 +92,9 @@ potion.effect.ycqin:stun=Зелье оглушения
 splash_potion.effect.ycqin:stun=Взрывное зелье оглушения
 lingering_potion.effect.ycqin:stun=Туманное зелье оглушения
 tipped_arrow.effect.ycqin:stun=Стрела оглушения
+
+effect.ycqin.confusion=Смятение
+potion.effect.ycqin:confusion=Зелье смятения
+splash_potion.effect.ycqin:confusion=Взрывное зелье смятения
+lingering_potion.effect.ycqin:confusion=Туманное зелье смятения
+tipped_arrow.effect.ycqin:confusion=Стрела смятения

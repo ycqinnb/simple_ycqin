@@ -110,6 +110,9 @@ public class ModConfig {
     public static int pullDownStun = 60;               // 拉下后眩晕时间
     public static float naturalSpawnChance = 0.05f;    // 自然生成强化生物的概率
 
+    public static boolean mirageEnabled;
+    public static boolean mirageCleanItems;   // 离开幻境时是否清空带标记的物品
+
 
 
 
@@ -333,6 +336,13 @@ public class ModConfig {
         pullDownStun = config.getInt("pullDownStun", categoryReducer, 60, 0, 1000, "拉下后眩晕时间（tick）");
         naturalSpawnChance = config.getFloat("naturalSpawnChance", categoryReducer, 0.05f, 0, 1, "自然生成强化生物的概率（等级>2时）");
         // 保存变更
+        String category = "mirage";
+        config.addCustomCategoryComment(category, "幻境维度相关设置");
+        mirageEnabled = config.getBoolean("mirageEnabled", category, true, "是否启用幻境维度");
+        mirageCleanItems = config.getBoolean("mirageCleanItems", category, true,
+                "离开幻境时是否清除所有在幻境中获得/产生的物品（推荐开启，防止刷物品）");
+
+
         if (config.hasChanged()) {
             config.save();
         }

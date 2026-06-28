@@ -12,7 +12,11 @@ public class ProtectCorePlugin implements IFMLLoadingPlugin {
     public ProtectCorePlugin(){}
     @Override
     public String[] getASMTransformerClass() {
-        return new String[]{"yc.ycqin.nb.srpcore.ProtectClassTransformer"};
+        return new String[]{
+                "yc.ycqin.nb.srpcore.ProtectClassTransformer",
+                "yc.ycqin.nb.srpcore.MirageEndTransformer",
+                "yc.ycqin.nb.srpcore.AttackLogTransformer"
+        };
     }
     @Override public String getModContainerClass() { return null; }
     @Nullable

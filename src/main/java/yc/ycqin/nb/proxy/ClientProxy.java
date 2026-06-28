@@ -1,14 +1,12 @@
 package yc.ycqin.nb.proxy;
 
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.fml.client.registry.ClientRegistry;
 import net.minecraftforge.fml.client.registry.RenderingRegistry;
-import net.minecraftforge.fml.common.Optional;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
-import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
+import yc.ycqin.nb.client.animation.EyeAnimationHandler;
 import yc.ycqin.nb.client.render.*;
 import yc.ycqin.nb.common.entity.EntitySlashOrbBoom;
 import yc.ycqin.nb.common.entity.EntitySlashOrbVoid;
@@ -16,6 +14,7 @@ import yc.ycqin.nb.common.entity.EntitySlashOrbVoid;
 import yc.ycqin.nb.common.entity.EntitySummonSlash;
 import yc.ycqin.nb.common.entity.tileentity.TileEntityLureActivator;
 import yc.ycqin.nb.common.entity.tileentity.TileEntityParasiteCore;
+import yc.ycqin.nb.event.dim.EyeRenderHandler;
 import yc.ycqin.nb.gui.UDBarDecorator;
 import yc.ycqin.nb.register.ModelsRegister;
 import yc.ycqin.nb.register.TinkerTraitsRegister;
@@ -28,7 +27,8 @@ public class ClientProxy extends CommonProxy {
         if (CommonProxy.isOverLoaded){
             MinecraftForge.EVENT_BUS.register(UDBarDecorator.In);
         }
-
+        MinecraftForge.EVENT_BUS.register(new EyeRenderHandler());
+        MinecraftForge.EVENT_BUS.register(new EyeAnimationHandler());
         //MinecraftForge.EVENT_BUS.register(new KeyInputHandler());
         if (CommonProxy.isSlashBladeLoaded) {
             RenderingRegistry.registerEntityRenderingHandler(EntitySlashOrbBoom.class, RenderSlashOrbScary::new);

@@ -2,7 +2,6 @@ package yc.ycqin.nb.proxy;
 
 import com.mrcrayfish.guns.common.WorkbenchRegistry;
 import mods.flammpfeil.slashblade.SlashBlade;
-import net.minecraft.init.Blocks;
 import net.minecraft.init.PotionTypes;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -20,6 +19,9 @@ import yc.ycqin.nb.common.blade.sa.SaLoader;
 import yc.ycqin.nb.common.blade.se.SeLoad;
 import yc.ycqin.nb.config.ModConfig;
 import yc.ycqin.nb.event.*;
+import yc.ycqin.nb.event.dim.DimEvent;
+import yc.ycqin.nb.event.dim.DimensionAttributeHandler;
+import yc.ycqin.nb.event.dim.DropHandler;
 import yc.ycqin.nb.register.*;
 
 public class CommonProxy {
@@ -29,6 +31,7 @@ public class CommonProxy {
     public static boolean isTCArmorLoaded = false;
     public static boolean isBaublesLoaded = false;
     public static boolean isOverLoaded = false;
+    public static boolean isOverCourageLoaded = false;
     public TinkerTraitsRegister tinkerTraitsRegister;
     public void preInit(FMLPreInitializationEvent event) {
         isSlashBladeLoaded = Loader.isModLoaded("flammpfeil.slashblade");
@@ -37,6 +40,7 @@ public class CommonProxy {
         isTCArmorLoaded = Loader.isModLoaded("conarm");
         isBaublesLoaded = Loader.isModLoaded("baubles");
         isOverLoaded = Loader.isModLoaded("overlast");
+        isOverCourageLoaded = isCourageClassPresent();
 
         new ItemsRegister();
         new SoundRegister();
@@ -59,6 +63,7 @@ public class CommonProxy {
         MinecraftForge.EVENT_BUS.register(new AdaptationReductionHandler());
         MinecraftForge.EVENT_BUS.register(new ProtectedMobHandler());
         MinecraftForge.EVENT_BUS.register(new SyncEvent());
+        MinecraftForge.EVENT_BUS.register(new DimEvent());
         registerBrewingRecipe();
         if (isCgmModLoaded) regWorldWar();
         if (isTCLoaded){
@@ -132,5 +137,16 @@ public class CommonProxy {
         new SeLoad();
         SlashBlade.InitEventBus.register(new BladeBloodstainedSky());
         SlashBlade.InitEventBus.register(new SaLoader());
+    }
+
+    public static boolean isCourageClassPresent() {
+        try {
+            Class.forName("com.overlast.cap.sanity.SanityProvider",
+                    false,
+                    Thread.currentThread().getContextClassLoader());
+            return true;
+        } catch (ClassNotFoundException | NoClassDefFoundError e) {
+            return false;
+        }
     }
 }
